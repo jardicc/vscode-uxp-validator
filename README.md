@@ -1,6 +1,6 @@
 # Validator for UXP - WIP
 
-Validates manifest.json and CSS, LESS, SCSS files for UXP compatibility.
+Validates manifest.json and CSS, LESS, SCSS files for UXP compatibility...
 
 ## Functionality
 
