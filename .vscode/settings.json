@@ -1,0 +1,34 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+	"files.exclude": {
+		"out": false,
+		"CssServiceOriginal":true
+	},
+	"search.exclude": {
+		"out": true,
+		"CssServiceOriginal":true
+	},
+	"files.trimTrailingWhitespace": true,
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	"typescript.tsdk": "./node_modules/typescript/lib",
+	"typescript.tsc.autoDetect": "off",
+	"eslint.enable": true,
+	"eslint.validate": [
+		"typescript"
+	],
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	},
+	"eslint.workingDirectories": [
+		"./client",
+		"./server",
+		"./common"
+	],
+	"eslint.trace.server": "off",
+	"eslint.lintTask.enable": true,
+	"eslint.format.enable": true,
+	"cSpell.words": [
+		"uxpvalidator"
+	],
+}

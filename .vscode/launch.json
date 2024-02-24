@@ -1,0 +1,79 @@
+// A launch configuration that compiles the extension and then opens it inside a new window
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "extensionHost",
+			"request": "launch",
+			"name": "Launch Client",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--inspect"
+			],
+			"autoAttachChildProcesses": true,
+			"sourceMaps": true,
+			"localRoot": "${workspaceFolder}/client/out/",
+			"outFiles": [
+				"${workspaceFolder}/client/out/**/*.js",
+				"${workspaceFolder}/server/out/**/*.js"
+			],
+			"preLaunchTask": "npm: watch",
+			"skipFiles": [
+				"<node_internals>/**",
+				"**/extensionHostProcess.js",
+				"**/Program Files/**"
+			]
+			/*
+			"resolveSourceMapLocations": [
+				"${workspaceFolder}/server/out/**",
+				"${workspaceFolder}/client/out/**",
+			],
+			*/
+			// "pauseForSourceMap": true,
+
+		},
+		// {
+		// 	"type": "node",
+		// 	"request": "attach",
+		// 	"name": "Attach server",
+//
+		// 	"processId": "${command:PickProcess}",
+		// 	"skipFiles": [
+		// 		"<node_internals>/**",
+		// 		"**/extensionHostProcess.js"
+		// 	],
+		// 	"localRoot": "${workspaceFolder}/server/out",
+		// 	"remoteRoot": "${workspaceFolder}/server/out",
+//
+		// 	"outFiles": [
+		// 		"${workspaceFolder}/server/out"
+		// 	],
+		// 	"sourceMaps": true,
+		// 	"pauseForSourceMap": true,
+		// 	"resolveSourceMapLocations": [
+		// 		"**/node_modules/**",
+		// 		"${workspaceFolder}/server/out**",
+		// 	],
+		// 	"cwd": "${workspaceFolder}/server/out"
+		// 	/*
+		// 	"sourceMapPathOverrides": {
+		// 		"webpack:///./~/*": "${workspaceFolder}/node_modules/*",
+		// 		"webpack:///./*": "${workspaceFolder}/src/node/*",
+		// 		"webpack:///*": "*"
+		// 	}
+		// 	*/
+		// },
+
+	],
+	/*
+	"compounds": [
+		{
+			"name": "Compound",
+			"configurations": [
+				"Attach server", "Launch Client"
+			]
+		}
+	]
+	*/
+}

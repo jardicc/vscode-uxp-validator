@@ -1,0 +1,255 @@
+@import "variables";
+@import "header-styles";
+@import "footer-styles";
+@use "sass:math" as math;
+
+$variable: global value;
+
+nav {
+  background-color:#333;
+  padding:1em;
+  ul {
+    margin:0;
+    padding:0;
+    list-style:none;
+    li {
+      display:inline-block;
+    }
+  }
+}
+
+/* Define standard variables and values for website */
+$bgcolor: lightblue;
+$textcolor: darkblue;
+$fontsize: 18px;
+
+/* Use the variables */
+body {
+  background-color: $bgcolor;
+  color: $textcolor;
+  font-size: $fontsize;
+}
+
+$primary-color: #47dff0;
+$secondary-color: darken($primary-color, 50%);
+$margin: 16px;
+
+.highlight {
+    border-color: $primary-color;
+    color: $secondary-color;
+}
+
+h1 {
+    span {
+        margin: $margin / 2;
+    }
+
+    color: $secondary-color;
+}
+
+// Simple
+@mixin error-text {
+  color: red;
+  font-size: 25px;
+  font-weight: bold;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+// With Parameter
+@mixin message-text($color) {
+  color: $color;
+  font-size: 25px;
+  font-weight: bold;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.error {
+  @include error-text();
+}
+
+.success {
+  @include message-text(green);
+}
+
+.info {
+  @include message-text(blue);
+}
+
+.error-text {
+  color: red;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.error-notice {
+  @extend .error-text;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+@mixin button-base() {
+  @include typography(button);
+  @include ripple-surface;
+  @include ripple-radius-bounded;
+
+  display: inline-flex;
+  position: relative;
+  height: $button-height;
+  border: none;
+  vertical-align: middle;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    color: $mdc-button-disabled-ink-color;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+@mixin define-emoji($name, $glyph) {
+  span.emoji-#{$name} {
+    font-family: IconFont;
+    font-variant: normal;
+    font-weight: normal;
+    content: $glyph;
+  }
+}
+
+@include define-emoji("women-holding-hands", "👭");
+
+
+.content {
+  $variable: local value;
+  // shadowing
+  value: $variable;
+}
+
+.sidebar {
+  value: $variable;
+}
+
+$dark-theme: true !default;
+$primary-color: #f8bbd0 !default;
+$accent-color: #6a1b9a !default;
+
+@if $dark-theme {
+  $primary-color: darken($primary-color, 60%);
+  $accent-color: lighten($accent-color, 60%);
+}
+
+.button {
+  background-color: $primary-color;
+  border: 1px solid $accent-color;
+  border-radius: 3px;
+}
+
+@use "sass:map";
+
+$theme-colors: (
+  "success": #28a745,
+  "info": #17a2b8,
+  "warning": #ffc107,
+);
+
+.alert {
+  // Instead of $theme-color-#{warning}
+  background-color: map.get($theme-colors, "warning");
+}
+
+@mixin inline-animation($duration) {
+  $name: inline-#{unique-id()};
+
+  @keyframes #{$name} {
+    @content;
+  }
+
+  animation-name: $name;
+  animation-duration: $duration;
+  animation-iteration-count: infinite;
+}
+
+.pulse {
+  @include inline-animation(2s) {
+    from { background-color: yellow }
+    to { background-color: red }
+  }
+}
+
+.example {
+  unquoted: #{"string"};
+}
+
+$known-prefixes: webkit, moz, ms, o;
+
+@mixin prefix($property, $value, $prefixes) {
+  @each $prefix in $prefixes {
+    @if not index($known-prefixes, $prefix) {
+      @warn "Unknown prefix #{$prefix}.";
+    }
+
+    -#{$prefix}-#{$property}: $value;
+  }
+  #{$property}: $value;
+}
+
+.tilt {
+  // Oops, we typo'd "webkit" as "wekbit"!
+  @include prefix(transform, rotate(15deg), wekbit ms);
+}
+
+@mixin inset-divider-offset($offset, $padding) {
+  $divider-offset: (2 * $padding) + $offset;
+  @debug "divider offset: #{$divider-offset}";
+
+  margin-left: $divider-offset;
+  width: calc(100% - #{$divider-offset});
+}
+
+@use "sass:selector";
+
+@mixin unify-parent($child) {
+  @at-root #{selector.unify(&, $child)} {
+    @content;
+  }
+}
+
+.wrapper .field {
+  @include unify-parent("input") {
+    /* ... */
+  }
+  @include unify-parent("select") {
+    /* ... */
+  }
+}
+
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+
+/// Return a copy of $list with all elements for which $condition returns `true`
+/// removed.
+@function remove-where($list, $condition) {
+  $new-list: ();
+  $separator: list.separator($list);
+  @each $element in $list {
+    @if not meta.call($condition, $element) {
+      $new-list: list.append($new-list, $element, $separator: $separator);
+    }
+  }
+  @return $new-list;
+}
+
+$fonts: Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+.content {
+  @function contains-helvetica($string) {
+    @return string.index($string, "Helvetica");
+  }
+  font-family: remove-where($fonts, meta.get-function("contains-helvetica"));
+}
+

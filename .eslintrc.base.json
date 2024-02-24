@@ -1,0 +1,50 @@
+{
+	"$schema": "http://json.schemastore.org/eslintrc",
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": 2020,
+		"sourceType": "module"
+	},
+	"env": {
+		"node": true,
+		"es2020": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended"
+	],
+	"plugins": [
+		"@typescript-eslint"
+	],
+	"rules": {
+		"no-unused-vars": "off",
+		"no-extra-semi": "warn",
+		"curly": "warn",
+		"quotes": ["error", "double", { "allowTemplateLiterals": true } ],
+		"eqeqeq": "error",
+		"indent": ["warn", "tab", { "SwitchCase": 1 } ],
+
+		"no-empty-interface": 0,
+		"no-unreachable-loop": [
+			"error"
+		],
+		"@typescript-eslint/no-unused-vars": "off",
+		"@typescript-eslint/no-empty-interface": "off",
+		"@typescript-eslint/no-explicit-any": "warn",
+		"@typescript-eslint/no-var-requires": "off",
+		"no-promise-executor-return": "error",
+
+		"linebreak-style": [
+			"error",
+			"windows"
+		],
+		"comma-dangle": [
+			"error",
+			"always-multiline"
+		],
+		"semi": [
+			"error",
+			"always"
+		]
+	}
+}

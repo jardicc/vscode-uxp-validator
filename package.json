@@ -1,0 +1,106 @@
+{
+  "name": "uxpvalidator",
+  "displayName": "Validator for UXP",
+  "description": "Keeps developers sane",
+  "version": "0.0.4",
+  "author": "Jaroslav Bereza",
+  "license": "Trial",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jardicc/uxp-validator-3"
+  },
+  "keywords": [
+    "UXP"
+  ],
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "activationEvents": [
+    "onLanguage:json",
+    "onLanguage:css",
+    "onLanguage:less",
+    "onLanguage:scss"
+  ],
+  "main": "./client/out/client/src/extension.js",
+  "icon": "client/icon.png",
+  "contributes": {
+    "commands": [
+      {
+        "command": "uxpvalidator.enable",
+        "title": "UXP Validator: Start"
+      },
+      {
+        "command": "uxpvalidator.disable",
+        "title": "UXP Validator: Stop"
+      },
+      {
+        "command": "uxpvalidator.setVersion",
+        "title": "UXP Validator: Set version"
+      }
+    ],
+    "configuration": {
+      "title": "UXP Validator Settings",
+      "properties": {
+        "uxpvalidator.enabled": {
+          "order": 1,
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable this extension"
+        },
+        "uxpvalidator.autoDetectVersion": {
+          "order": 2,
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect UXP version from manifest.json"
+        },
+        "uxpvalidator.version": {
+          "order": 3,
+          "type": "string",
+          "default": "7.0.0",
+          "description": "Version of the UXP to validate against. Applies only when autoDetectVersion is false.",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run webpack",
+    "webpack": "npm run clean && webpack --mode production --config ./client/webpack.config.js && webpack --mode production --config ./server/webpack.config.js",
+    "webpack:dev": "npm run clean && webpack --mode none --config ./client/webpack.config.js && webpack --mode none --config ./server/webpack.config.js",
+    "compile": "tsc -b",
+    "compile:client": "tsc -b ./client/tsconfig.json",
+    "compile:server": "tsc -b ./server/tsconfig.json",
+    "watch": "tsc -b -w",
+    "lint": "npm run lint:client && npm run lint:server",
+    "lint:client": "eslint --config ./client/.eslintrc.json ./client/src/*.ts",
+    "lint:server": "eslint --config ./server/.eslintrc.json ./server/src/*.ts",
+    "clean": "rimraf client/out && rimraf server/out",
+    "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+    "build": "vsce package",
+    "mocha": "mocha --require source-map-support/register"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.199",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.18.4",
+    "@types/vscode": "^1.83.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
+    "@vscode/l10n": "^0.0.16",
+    "@vscode/test-web": "^0.0.22",
+    "jsonc-parser": "^3.2.0",
+    "lodash": "^4.17.21",
+    "merge-options": "^3.0.4",
+    "mocha": "^10.2.0",
+    "path-browserify": "^1.0.1",
+    "rimraf": "^3.0.2",
+    "source-map-support": "^0.5.21",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.2.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.51.0"
+  }
+}

@@ -1,0 +1,491 @@
+a,
+.link {
+	color: #428bca;
+}
+
+.widget {
+	color: #fff;
+	background: #428bca;
+}
+
+// Variables
+@link-color: #428bca; // sea blue
+@link-color-hover: darken(@link-color, 10%);
+
+// Usage
+a,
+.link {
+	color: @link-color;
+}
+
+a:hover {
+	color: @link-color-hover;
+}
+
+.widget {
+	color: #fff;
+	background: @link-color;
+}
+
+// Variables
+@my-selector: banner;
+
+// Usage
+.@{my-selector} {
+	font-weight: bold;
+	line-height: 40px;
+	margin: 0 auto;
+}
+
+.banner {
+	font-weight: bold;
+	line-height: 40px;
+	margin: 0 auto;
+}
+
+// Variables
+@images: "../img";
+
+// Usage
+body {
+	color: #444;
+	background: url("@{images}/white-sand.png");
+}
+
+// Variables
+@themes: "../../src/themes";
+
+// Usage
+@import "@{themes}/tidal-wave.less";
+
+@property: color;
+
+.widget {
+	@{property}: #0ee;
+	background-@{property}: #999;
+}
+
+.widget {
+	color: #0ee;
+	background-color: #999;
+}
+
+@primary: green;
+@secondary: blue;
+
+.section {
+	@color: primary;
+
+	.element {
+		color: @@color;
+	}
+}
+
+.lazy-eval {
+	width: @var;
+}
+
+@var: @a;
+@a: 9%;
+
+.lazy-eval {
+	width: @var;
+	@a: 9%;
+}
+
+@var: @a;
+@a: 100%;
+
+@var: 0;
+
+.class {
+	@var: 1;
+
+	.brass {
+		@var: 2;
+		three: @var;
+		@var: 3;
+	}
+
+	one: @var;
+}
+
+.header {
+	--color: white;
+	color: var(--color); // the color is black
+	--color: black;
+}
+
+.widget {
+	color: #efefef;
+	background-color: $color;
+}
+
+.block {
+	color: red;
+
+	.inner {
+		background-color: $color;
+	}
+
+	color: blue;
+}
+
+// library
+@base-color: green;
+@dark-color: darken(@base-color, 10%);
+
+// use of library
+@import "library.less";
+@base-color: red;
+
+a {
+	color: blue;
+
+	&:hover {
+		color: green;
+	}
+}
+
+.button {
+	&-ok {
+		background-image: url("ok.png");
+	}
+
+	&-cancel {
+		background-image: url("cancel.png");
+	}
+
+	&-custom {
+		background-image: url("custom.png");
+	}
+}
+
+.link {
+	&+& {
+		color: red;
+	}
+
+	& & {
+		color: green;
+	}
+
+	&& {
+		color: blue;
+	}
+
+	&,
+	&ish {
+		color: cyan;
+	}
+}
+
+.grand {
+	.parent {
+		&>& {
+			color: red;
+		}
+
+		& & {
+			color: green;
+		}
+
+		&& {
+			color: blue;
+		}
+
+		&,
+		&ish {
+			color: cyan;
+		}
+	}
+}
+
+p, a, ul, li {
+	border-top: 2px dotted #366;
+	& + & {
+	  border-top: 0;
+	}
+  }
+
+  .foo {
+	background: #900;
+  }
+  @import "this-is-valid.less";
+
+  @import "foo";      // foo.less is imported
+  @import "foo.less"; // foo.less is imported
+  @import "foo.php";  // foo.php imported as a Less file
+  @import "foo.css";  // statement left in place, as-is
+
+  .navbar:extend(.navbar all) {}
+
+  @import (inline) "not-less-compatible.css";
+  @import (less) "foo.css";
+  @import (css) "foo.less";
+
+
+// file: foo.less
+.a {
+  color: green;
+}
+// file: main.less
+@import (multiple) "foo.less";
+@import (multiple) "foo.less";
+
+nav ul {
+	&:extend(.inline);
+	background: blue;
+}
+
+nav ul {
+	&:extend(.inline);
+	background: blue;
+}
+	.inline {
+	color: red;
+}
+
+.a:extend(.b) {}
+
+// the above block does the same thing as the below block
+.a {
+  &:extend(.b);
+}
+.c:extend(.d all) {
+  // extends all instances of ".d" e.g. ".x.d" or ".d.x"
+}
+.c:extend(.d) {
+  // extends only instances where the selector will be output as just ".d"
+}
+
+.e:extend(.f) {}
+.e:extend(.g) {}
+
+// the above and the below do the same thing
+.e:extend(.f, .g) {}
+
+.big-division,
+.big-bag:extend(.bag),
+.big-bucket:extend(.bucket) {
+  // body
+}
+
+pre:hover,
+.some-class {
+  &:extend(div pre);
+}
+
+.bucket {
+	tr { // nested ruleset with target selector
+	  color: blue;
+	}
+  }
+  .some-class:extend(.bucket tr) {} // nested ruleset is recognized
+
+  .bucket {
+	tr & { // nested ruleset with target selector
+	  color: blue;
+	}
+  }
+  .some-class:extend(tr .bucket) {} // nested ruleset is recognized
+
+  .a.class,
+.class.a,
+.class > .a {
+  color: blue;
+}
+.test:extend(.class) {} // this will NOT match the any selectors above
+
+:nth-child(1n+3) {
+	color: blue;
+}
+.child:extend(:nth-child(n+3)) {}
+
+.a.b.test,
+.test.c {
+  color: orange;
+}
+.test {
+  &:hover {
+    color: green;
+  }
+}
+
+.replacement:extend(.test all) {}
+
+@variable: .bucket;
+@{variable} { // interpolated selector
+  color: blue;
+}
+.some-class:extend(.bucket) {} // does nothing, no match is found
+
+@media print {
+	.screenClass:extend(.selector) {} // extend inside media
+	.selector { // this will be matched - it is in the same media
+	  color: black;
+	}
+  }
+  .selector { // ruleset on top of style sheet - extend ignores it
+	color: red;
+  }
+  @media screen {
+	.selector {  // ruleset inside another media - extend ignores it
+	  color: blue;
+	}
+  }
+
+  .mixin() {
+	box-shadow+: inset 0 0 10px #555;
+  }
+  .myclass {
+	.mixin();
+	box-shadow+: 0 0 20px black;
+  }
+
+
+  #namespace when (@mode = huge) {
+	.mixin() { /* */ }
+  }
+
+  #namespace {
+	.mixin() when (@mode = huge) { /* */ }
+  }
+
+  .foo (@bg: #f5f5f5, @color: #900) {
+	background: @bg;
+	color: @color;
+  }
+  .unimportant {
+	.foo();
+  }
+  .important {
+	.foo() !important;
+  }
+
+  .border-radius(@radius) {
+	-webkit-border-radius: @radius;
+	   -moz-border-radius: @radius;
+			border-radius: @radius;
+  }
+
+  #header {
+	.border-radius(4px);
+  }
+  .button {
+	.border-radius(6px);
+  }
+
+  .wrap() {
+	text-wrap: wrap;
+	white-space: -moz-pre-wrap;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+  }
+
+  pre { .wrap() }
+
+  .loop(@counter) when (@counter > 0) {
+	.loop((@counter - 1));    // next iteration
+	width: (10px * @counter); // code for each iteration
+  }
+
+  div {
+	.loop(5); // launch the loop
+  }
+
+  @media: mobile;
+
+.mixin(@a) when (@media = mobile) { }
+.mixin(@a) when (@media = desktop) { }
+
+.max(@a; @b) when (@a > @b) { width: @a }
+.max(@a; @b) when (@a < @b) { width: @b }
+
+.mixin(@a) when (isnumber(@a)) and (@a > 0) { }
+
+.mixin(@a; @b: 0) when (isnumber(@b)) { }
+.mixin(@a; @b: black) when (iscolor(@b)) { }
+
+#theme.dark.navbar {
+	.colors(light) {
+	  primary: purple;
+	}
+	.colors(dark) {
+	  primary: black;
+	  secondary: grey;
+	}
+  }
+
+  .navbar {
+	@colors: #theme.dark.navbar.colors(dark);
+	background: @colors[primary];
+	border: 1px solid @colors[secondary];
+  }
+
+  #library() {
+	.colors() {
+	  background: green;
+	}
+  }
+  .box {
+	@alias: #library.colors();
+	@alias();
+  }
+
+  // declare detached ruleset
+@detached-ruleset: { background: red; }; // semi-colon is optional in 3.5.0+
+
+// use detached ruleset
+.top {
+    @detached-ruleset();
+}
+
+@config: {
+	option1: true;
+	option2: false;
+  }
+
+  .mixin() when (@config[option1] = true) {
+	selected: value;
+  }
+
+  .box {
+	.mixin();
+  }
+
+  @sizes: {
+	mobile: 320px;
+	tablet: 768px;
+	desktop: 1024px;
+  }
+
+  .navbar {
+	display: block;
+
+	@media (min-width: @sizes[tablet]) {
+	  display: inline-block;
+	}
+  }
+
+  #ns {
+	@a: one;
+	.mixin-1() {
+	  prop: @a;
+	}
+  }
+  .rule {
+	#ns.mixin-1();
+  }
+
+  & when (@my-option = true) {
+	button {
+	  color: white;
+	}
+	a {
+	  color: blue;
+	}
+  }
+
+  @plugin "my-plugin";  // automatically appends .js if no extension
+

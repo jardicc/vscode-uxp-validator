@@ -1,0 +1,11 @@
+**
+!package.json
+!LICENSE.md
+!README.md
+!CHANGELOG.md
+!client/out/**/*.js
+!client/out/**/*.txt
+!client/icon.png
+
+!server/out/**/*.js
+!server/out/**/*.txt

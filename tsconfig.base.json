@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"noImplicitAny": true,
+		"noImplicitReturns": false,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"strict": true,
+		"resolveJsonModule": true
+	}
+}
