@@ -1,13 +1,13 @@
 {
   "name": "uxpvalidator",
-  "displayName": "Validator for UXP",
-  "description": "Keeps developers sane",
-  "version": "0.0.4",
+  "displayName": "Validator for UXP (Beta)",
+  "description": "Validates CSS, LESS & SCSS for UXP. Intellisense and validation for Manifest.json. Beta version. Please report any issues on GitHub.",
+  "version": "0.0.4-beta",
   "author": "Jaroslav Bereza",
-  "license": "Trial",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jardicc/uxp-validator-3"
+    "url": "https://github.com/jardicc/vscode-uxp-validator"
   },
   "keywords": [
     "UXP"
