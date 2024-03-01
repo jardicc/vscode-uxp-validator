@@ -4,13 +4,18 @@
   "description": "Validates CSS, LESS & SCSS for UXP. Intellisense and validation for Manifest.json. Beta version. Please report any issues on GitHub.",
   "version": "0.0.4",
   "author": "Jaroslav Bereza",
+  "publisher": "JaroslavBereza",
   "license": "MIT",
+  "pricing": "Free",
   "repository": {
     "type": "git",
     "url": "https://github.com/jardicc/vscode-uxp-validator"
   },
   "keywords": [
-    "UXP"
+    "UXP", "Adobe", "Photoshop", "InDesign", "XD", "Plugin", "Extension", "Validator", "Intellisense", "Validation", "CSS", "LESS", "SCSS", "Manifest.json"
+  ],
+  "categories": [
+    "Linters", "Programming Languages", "Other"
   ],
   "engines": {
     "vscode": "^1.74.0"
