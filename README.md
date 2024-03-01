@@ -1,6 +1,6 @@
 # Validator for UXP - WIP
 
-Validates manifest.json and CSS, LESS, SCSS files for UXP compatibility...
+Validates manifest.json and CSS, LESS, SCSS files for UXP compatibility.
 
 ## Functionality
 
@@ -11,5 +11,26 @@ Validates manifest.json and CSS, LESS, SCSS files for UXP compatibility...
 - Use statusbar button to:
   - enable/disable plugin
   - change UXP version to validate against
-- Hover and documentation suggestions are work in progress
-- Validation rules are work in progress too
+
+## manifest.json
+
+### Version hints
+
+![intellisense example](/media/min-version.mp4)
+
+### Intellisense
+
+![intellisense example](/media/intellisense.png)
+
+### Validation
+
+![validation example](/media/manifest-validation.png)
+
+### Version support checks
+
+![version support example](/media/manifest-version-support.png)
+
+
+## Out of scope
+
+- `manifestVersion: 3` validation (often used in Experience Designer)
