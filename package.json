@@ -2,7 +2,7 @@
   "name": "uxpvalidator",
   "displayName": "Validator for UXP (Beta)",
   "description": "Validates CSS, LESS & SCSS for UXP. Intellisense and validation for Manifest.json. Beta version. Please report any issues on GitHub.",
-  "version": "0.0.4-beta",
+  "version": "0.0.4",
   "author": "Jaroslav Bereza",
   "license": "MIT",
   "repository": {
