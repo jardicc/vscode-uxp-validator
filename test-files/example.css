@@ -1,0 +1,19 @@
+
+.myClass::placeholder{
+	color: red;
+	display: grid;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: 5ch;
+	border: 1px inset red;
+	background-repeat: repeat-x;
+	transition: all 0.5s;
+}
+
+.goodClass{
+	color: green;
+	display: flex;
+	font-family: 'Courier New', Courier;
+	font-size: 1.2em;
+	border: 1px dashed green;
+	background-repeat: no-repeat;	
+}
