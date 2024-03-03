@@ -807,20 +807,11 @@ Behavior before UXP-6.0:
     }
 */
 
-/*
-UXP 6.2
-
-Exposed required classes for Hybrid plugins and v5 Manifest.
-changed addon format from
-
-*/
 
 /*
 7.1
 This feature is currently behind a feature flag called "enableFillAsCustomAttribute" which will be disabled by default.
 This will give component teams the time to make changes on their side to honour the newly working "fill" attribute.
-Note: This Feature Flag will be default turned on from UXP 7.2 onwards, therefore component teams are requested
-to test and make changes before the UXP 7.2 release(UXP release in July)
 
 This feature flag can be added in manifest.json file of the plugin as below:-
 
