@@ -2,7 +2,7 @@ import {THostApp} from "./types";
 
 export const versionTable:TVersionTable = {
 	PS: {
-		//"25.3.0": {uxp: "7.4.0", date: new Date("Now 2023")}, // check the date
+		"25.5.0": {uxp: "7.4.0", date: new Date("Feb 2024")}, // February 2024 (version 25.5) release
 		"25.2.0": {uxp: "7.3.0", date: new Date("Now 2023")}, // check the date
 		"25.0.0": {uxp: "7.2.0", date: new Date("Sep 2023")},
 		"24.6.0": {uxp: "7.1.0", date: new Date("Apr 2023")}, // June 2023 (version 24.6) release
@@ -21,11 +21,9 @@ export const versionTable:TVersionTable = {
 		"22.2.0": {uxp: "4.3.2", date: new Date("Feb 2021")}, // Version 22.2 was released in Feb 2021.
 		"21.1.0": {uxp: "3.4.2", date: new Date("Feb 2020")}, // Version 21.1 was released in Feb 2020.
 
-
 		/*
 			Version 24.7 was released on July 27, 2023.
 			May 2023 (version 24.5) release
-
 			Version 22.0.0 was released in October 2020.
 			Version 22.0.1 was released in November 2020.
 			Version 22.1.0 was released in December 2020.
@@ -38,8 +36,6 @@ export const versionTable:TVersionTable = {
 	ID: {
 		"19.0.0": {uxp: "7.3.1", date: new Date("Sep 2023")},
 		"18.5.0": {uxp: "7.1.0", date: new Date("Jun 2023")},
-		// "18.4.0": {},
-		// "18.1.0": {uxp: "6.5.0", date: new Date("Nov 2023")},
 	},
 	XD: {
 		"55.0.0": {uxp: "6.3.0", date: new Date("Aug 2022")},
@@ -73,7 +69,7 @@ export const v8Versions:IV8Versions = {
 			"ES2018 - RegExp Unicode 15.1 Property Escapes",
 			"ES2022 - RegExp Match Indices (`hasIndices` / `d` flag) > shows up in flags",
 		],
-	}, // fddd400 // Oct 27 2021
+	}, // Oct 27 2021
 
 	"5.1.0": {
 		v8: "8.9.255.20",
@@ -84,7 +80,7 @@ export const v8Versions:IV8Versions = {
 			"ES2018 - RegExp Unicode 15.1 Property Escapes",
 			"ES2020 - Spread parameters after optional chaining",
 		],
-	}, // 965758d // Feb 25 2021
+	}, // Feb 25 2021
 
 	"5.0.0": {
 		v8: "8.8.278.14",
@@ -95,7 +91,7 @@ export const v8Versions:IV8Versions = {
 			"ES2018 - RegExp Unicode 15.1 Property Escapes",
 			"ES2020 - Spread parameters after optional chaining",
 		],
-	}, // 9982ae4 // Jan 12 2021
+	}, // Jan 12 2021
 
 	"4.3.0": {
 		v8: "8.3.110.13",
@@ -106,7 +102,7 @@ export const v8Versions:IV8Versions = {
 			"ES2018 - RegExp Unicode 15.1 Property Escapes",
 			"ES2020 - Spread parameters after optional chaining",
 		],
-	}, // d4f47f1 // 	May 21 2020
+	}, // May 21 2020
 };
 
 type TVersionTable = Record<THostApp, IVersionTable>
