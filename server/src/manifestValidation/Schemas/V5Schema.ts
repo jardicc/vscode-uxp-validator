@@ -700,6 +700,10 @@ export const V5Schema: JSONSchema = {
 			"$ref": "#/definitions/EP",
 			"doNotSuggest": true,
 		},
+		"customData": {
+			"type": "object",
+			"markdownDescription": "Unofficial custom data property guaranteed to be ignored by UXP Validator plugin. Use it for your own purposes.",
+		},
 	},
 	"required": [
 		"id",

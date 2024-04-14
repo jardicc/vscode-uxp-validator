@@ -361,6 +361,10 @@ export const v4Schema = {
 		"panelEvents": {
 			"type": "object",
 		},
+		"customData": {
+			"type": "object",
+			"markdownDescription": "Unofficial custom data property guaranteed to be ignored by UXP Validator plugin. Use it for your own purposes.",
+		},
 	},
 	"required": [
 		"id",
