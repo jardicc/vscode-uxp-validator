@@ -129,10 +129,6 @@ export interface IV8Item{
 
 /*
 
-<!--
-index_desc: General information on UXP and its dependencies for 3rd party plugins and scripts
--->
-
 # UXP General Information
 - ECMAScript Version in UXP v6.4 : ECMA-262
 - React Version Supported in UXP v6.4: React 16 or lower
@@ -153,9 +149,6 @@ index_desc: General information on UXP and its dependencies for 3rd party plugin
 | InDesign      | -	             | ✅ from 18.0  |
 
 
-*/
-
-/*
 APPLICATION	UXP V6.3	|	UXP V6.2	|	UXP V6.1	|	UXP V6.0	|	UXP V5.6	|	UXP V5.5
 Photoshop				|	24.0		|	23.5		|	23.4		|	23.3		|	23.2		|	23.0
 InDesign				|	18.0		|	17.4		|	-			|	-			|	17.1		|	17.0
@@ -169,4 +162,5 @@ Animate					|	-			|	23.0		|	-			|	-			|	-			|	22.0
 Bridge					|	13.0		|	-			|	-			|	-			|	-			|	12.0
 Rush					|				|				|				|				|				|
 Aero					|				|				|				|				|				|
+
 */
