@@ -3835,6 +3835,29 @@ export const cssData: UXPCSSDataV1 = {
 			description:
 				"Represents an element that is the root of the document. In HTML 4, this is always the HTML element.",
 		},
+		{
+			name: "not",
+			browsers: ["UXP4.3.2"],
+			references: [
+				{
+					name: "MDN Reference",
+					url: "https://developer.mozilla.org/docs/Web/CSS/:not",
+				},
+			],
+			description:
+				"The negation pseudo-class, :not(X), is a functional notation taking a simple selector (excluding the negation pseudo-class itself) as an argument. It represents an element that is not represented by its argument.",
+		},
+		{
+			name: "defined",
+			browsers: ["UXP6.0"],
+			references: [
+				{
+					"name": "MDN Reference",
+					"url": "https://developer.mozilla.org/docs/Web/CSS/:defined",
+				},
+			],
+			description: "The :defined CSS pseudo-class represents any element that has been defined. This includes any standard element built in to the browser, and custom elements that have been successfully defined (i.e. with the CustomElementRegistry.define() method).",
+		},
 		// all pseudo classes
 		/*
 		":any-link",
@@ -3864,7 +3887,6 @@ export const cssData: UXPCSSDataV1 = {
 		":link",
 		":local-link",
 		":modal",
-		":not()",
 		":nth-col()",
 		":nth-last-col()",
 		":only-of-type",
