@@ -318,24 +318,12 @@ export const v4Schema = {
 				{
 					"$ref": "#/definitions/hostObject",
 				},
-				{
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/hostObject",
-					},
-				},
 			],
 		},
 		"hosts": {
 			"oneOf": [
 				{
 					"$ref": "#/definitions/hostObject",
-				},
-				{
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/hostObject",
-					},
 				},
 			],
 		},

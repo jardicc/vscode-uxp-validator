@@ -514,12 +514,6 @@ export const V5Schema: JSONSchema = {
 				{
 					"$ref": "#/definitions/hostObject",
 				},
-				{
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/hostObject",
-					},
-				},
 			],
 			"markdownDescription": "This tells where and how should plugin load.",
 		},
@@ -527,12 +521,6 @@ export const V5Schema: JSONSchema = {
 			"oneOf": [
 				{
 					"$ref": "#/definitions/hostObject",
-				},
-				{
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/hostObject",
-					},
 				},
 			],
 			"markdownDescription": "This tells where and how should plugin load.",
