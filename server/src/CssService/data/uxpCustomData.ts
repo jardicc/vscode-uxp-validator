@@ -4006,10 +4006,14 @@ export const cssData: UXPCSSDataV1 = {
 			name: "em",
 			browsers: ["UXP3.0"],
 		},
+		// ! This is wrongly implemented in UXP. Support disabled until fixed.
+		// See https://github.com/jardicc/vscode-uxp-validator/issues/1
+		/*
 		{
 			name: "rem",
 			browsers: ["UXP3.0"],
 		},
+		*/
 		{
 			name: "vh",
 			browsers: ["UXP3.0"],
