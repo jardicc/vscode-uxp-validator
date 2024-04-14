@@ -138,18 +138,19 @@ export function handlePermissions(node: json.ASTNode, textDocument: json.TextDoc
 		fonts							uxp 6.0.0
 		clipboard						uxp 6.0.0
 		enableAddon						ps 24.2.0, id n/a, xd n/a, (uxp 6.2.0)
-		enableUserInfo					uxp 7.3.0
+		enableUserInfo					uxp 7.3.0 implemented but fixed in 7.4.0
 	*/
 
 	if (node.type === "property" && node.keyNode.value === "enableUserInfo" && node.valueNode?.value === true) {
+		// TODO - change this to PS only
 		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
 
 		if (!uxpVersion) {
 			return;
 		}
 
-		if (satisfies(uxpVersion, "<7.3.0")) {
-			addProblem(node, `enableUserInfo is not supported in UXP version ${uxpVersion}. UXP version should be >=7.3.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		if (satisfies(uxpVersion, "<7.4.0")) {
+			addProblem(node, `enableUserInfo is not supported in UXP version ${uxpVersion}. And in 7.3.0 it returned same empty string hash for multiple different users. Reliable UXP version should be >=7.4.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
 		}
 	}
 	if (node.type === "property" && node.keyNode.value === "enableAddon" && node.valueNode?.value === true) {
