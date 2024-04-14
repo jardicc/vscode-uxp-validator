@@ -1,4 +1,4 @@
-# Validator for UXP - Beta
+# Validator for UXP
 
 UXP (Unified Extensibility Platform) is the modern way to create plugins and scripts for Adobe Creative Cloud
 
@@ -16,7 +16,7 @@ This plugin validates `manifest.json` and CSS, LESS, SCSS files for UXP compatib
 
 ## How to install
 
-[Download from VS Marketplace: Validator for UXP (Beta)](https://marketplace.visualstudio.com/items?itemName=JaroslavBereza.uxpvalidator)
+[Download from VS Marketplace: Validator for UXP](https://marketplace.visualstudio.com/items?itemName=JaroslavBereza.uxpvalidator)
 
 ## How to use
 
