@@ -144,9 +144,13 @@ export function handlePermissions(node: json.ASTNode, textDocument: json.TextDoc
 	if (node.type === "property" && node.keyNode.value === "enableUserInfo" && node.valueNode?.value === true) {
 		// TODO - change this to PS only
 		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+		const PSversion = LSPServer.validator.versionMatcher?.detectedVersions?.PS;
 
 		if (!uxpVersion) {
 			return;
+		}
+		if (!PSversion) {
+			addProblem(node, `enableUserInfo is currently supported only in Photoshop`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
 		}
 
 		if (satisfies(uxpVersion, "<7.4.0")) {
