@@ -62,7 +62,18 @@ Not all manifest parts are supported in older versions of host apps.
 
 ![version support example](/media/manifest-version-support.png)
 
-
 ## Out of scope
 
 - `manifestVersion: 3` validation (often used in Experience Designer)
+
+## How to develop/debug this plugin
+
+- make sure to uninstall the Marketplace version of this plugin (if you have any)
+- run `npm i` in root of the project, `server` folder and `client` folder
+- in project root run `npm run watch`
+- in Run & Debug tab in VSCode select `Launch Client` and click run
+- that is all you have to do... you can add breakpoints and inspect variables
+
+## How make an installer for this plugin
+
+- run `npm run build`
