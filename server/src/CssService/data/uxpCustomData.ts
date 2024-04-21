@@ -2952,8 +2952,9 @@ export const cssData: UXPCSSDataV1 = {
 		},
 		{
 			name: "pointer-events",
-			browsers: ["UXP3.0"],
+			browsers: ["UXP7.2"],
 			values: [
+			/*
 				{
 					name: "all",
 					description:
@@ -2964,10 +2965,16 @@ export const cssData: UXPCSSDataV1 = {
 					description:
             "The given element can be the target element for pointer events whenever the pointer is over the interior of the element.",
 				},
+				*/
 				{
 					name: "none",
 					description: "The given element does not receive pointer events.",
 				},
+				{
+					name: "auto",
+					description: "The element behaves as it would if the pointer-events property were not specified.",
+				},
+				/*
 				{
 					name: "painted",
 					description:
@@ -2998,9 +3005,10 @@ export const cssData: UXPCSSDataV1 = {
 					description:
             "The given element can be the target element for pointer events when the 'visibility' property is set to visible and when the pointer is over the perimeter of the element.",
 				},
+				*/
 			],
-			syntax:
-        "auto | none | visiblePainted | visibleFill | visibleStroke | visible | painted | fill | stroke | all | inherit",
+			syntax: "auto | none",
+			//syntax: "auto | none | visiblePainted | visibleFill | visibleStroke | visible | painted | fill | stroke | all | inherit",
 			relevance: 82,
 			references: [
 				{
