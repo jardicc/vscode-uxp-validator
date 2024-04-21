@@ -1,5 +1,6 @@
 import {JSONSchema} from "../JsonService/jsonSchema";
 import {V5PhotoshopData} from "./V5Photoshop";
+import {manifestVersionProperty} from "./manifestVersionProperty";
 
 export const V5Schema: JSONSchema = {
 	"$schema": "http://json-schema.org/draft-04/schema#",
@@ -390,21 +391,6 @@ export const V5Schema: JSONSchema = {
 				},
 			],
 		},
-		"addonObject": {
-			"properties": {
-				"name": {
-					"type": "string",
-					"minLength": 1,
-					"maxLength": 40,
-					"pattern": "^.*(\\.uxpaddon)$",
-				},
-			},
-			"required": [
-				"name",
-			],
-			"type": "object",
-			"unevaluatedProperties": false,
-		},
 	},
 	"properties": {
 		"analytics": {
@@ -430,11 +416,6 @@ export const V5Schema: JSONSchema = {
 			"minLength": 1,
 			"markdownDescription": "Unique identifier for your plugin. You can get your unique ID on the Adobe Developer Console",
 			// "description": "Unique identifier for your plugin. You can get your unique ID on the Adobe Developer Console",
-		},
-		"addon": {
-			"type": "object",
-			"$ref": "#/definitions/addonObject",
-			"markdownDescription": "Addon definitions for hybrid plugins. A UXP Hybrid plugin is a UXP plugin that can access the power of C++ native libraries.\n\n*Not supported in InDesign v18.5*",
 		},
 		"featureFlags": {
 			"type": "object",
@@ -668,11 +649,6 @@ export const V5Schema: JSONSchema = {
 					"markdownDescription": "Allows the plugin to access the fonts installed on the system.",
 					"const": "readInstalled",
 				},
-				"enableAddon": {
-					"const": true,
-					"default": true,
-					"markdownDescription": "Enables C++ native addons for hybrid plugins. Do not set this to `false`.",
-				},
 				"enableUserInfo": {
 					"type": "boolean",
 					"default": true,
@@ -683,19 +659,7 @@ export const V5Schema: JSONSchema = {
 			"markdownDescription": "Plugins using Manifest v5 will enjoy the enhancements in security with the introduction of new permissions model. Users will be asked for their consent when your plugin attempts to use openExternal, openPath, and sp-link/anchor tags. For everything else, consent is given at install time. Starting with v5, any permissions not explicitly declared in the manifest are not granted by default.",
 			"unevaluatedProperties": false,
 		},
-		"manifestVersion": {
-			"default": 5,
-			"enum": [
-				5,
-				4,
-			],
-			"markdownEnumDescriptions": [
-				"Recommended. Introduces `requiredPermissions`",
-				"# ⚠️ Deprecated. \n ## Do not use for new projects!",
-			],
-			"type": "integer",
-			"markdownDescription": "The version of the manifest. (This file). Different versions allows different properties and values.",
-		},
+		"manifestVersion": manifestVersionProperty(),
 		"version": {
 			"type": "string",
 			"minLength": 5,
@@ -740,54 +704,6 @@ export const V5Schema: JSONSchema = {
 			"required": [
 				"main",
 			],
-		},
-	],
-	/*
-	"dependentRequired": {
-		"addon": [
-			"requiredPermissions",
-		],
-	},
-	*/
-	// require permission when addon is specified
-	"dependentSchemas": {
-		"addon": {
-			"properties": {
-				"requiredPermissions": {
-					"type": "object",
-					"properties": {
-						"enableAddon": {
-							"type": "boolean",
-							"const": true,
-						},
-					},
-					"required": ["enableAddon"],
-				},
-			},
-			"required": ["requiredPermissions"],
-		},
-	},
-	// conditions
-	"allOf": [
-		// require "addon" property if permission is used
-		{
-			"if": {
-				"properties": {
-					"requiredPermissions": {
-						"properties": {
-							"enableAddon": {
-								"const": true,
-							},
-						},
-						// do not require "addon" object if permission is missing entirely
-						"required": ["enableAddon"],
-					},
-				},
-				"required": ["requiredPermissions"],
-			},
-			"then": {
-				"required": ["addon"],
-			},
 		},
 	],
 	"type": "object",

@@ -1,3 +1,5 @@
+import {manifestVersionProperty} from "./manifestVersionProperty";
+
 export const v4Schema = {
 	"definitions": {
 		"size": {
@@ -340,11 +342,7 @@ export const v4Schema = {
 				},
 			],
 		},
-		"manifestVersion": {
-			"minimum": 4,
-			"maximum": 4,
-			"type": "integer",
-		},
+		"manifestVersion": manifestVersionProperty(),
 		"version": {
 			"type": "string",
 			"minLength": 1,
