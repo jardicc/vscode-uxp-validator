@@ -449,6 +449,11 @@ export const V5Schema: JSONSchema = {
 					"default": true,
 					"markdownDescription": "Enable MutationObserver for browser-like DOM changes. `enableSWCSupport` already includes this flag. Supported since UXP 5.1",
 				},
+				"enableAlerts": {
+					"type": "boolean",
+					"default": true,
+					"markdownDescription": "Flag required since UXP 7.4.0. InDesign support since UXP 7.3.0. Photoshop support since UXP 7.0.0.",
+				},
 			},
 			"markdownDescription": "A set of feature flags that can be used to enable or disable certain features of the plugin. These flags are used to gate features that are not yet ready for general availability.",
 		},

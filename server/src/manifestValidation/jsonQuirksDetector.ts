@@ -107,12 +107,14 @@ export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument,
 		enableSWCSupport 7.0
 	*/
 	if (node.type === "property" && node.keyNode.value === "enableSWCSupport" && node.valueNode?.value === true) {
-		const nodePath = getNodePath(node);
+		//const nodePath = getNodePath(node);
 
+		/*
 		const strPath = nodePath.join(".");
 		if (!strPath.includes("featureFlags")) {
 			return;
 		}
+		*/
 
 		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
 
@@ -123,7 +125,27 @@ export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument,
 		if (satisfies(uxpVersion, "<7.0.0")) {
 			addProblem(node, `enableSWCSupport is not supported in UXP version ${uxpVersion}. UXP version should be >=7.0.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
 		}
+	}
+	if (node.type === "property" && node.keyNode.value === "enableAlerts" && node.valueNode?.value === true) {
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+		const PSversion = LSPServer.validator.versionMatcher?.detectedVersions?.PS;
+		const InDesignVersion = LSPServer.validator.versionMatcher?.detectedVersions?.ID;
 
+		if (!uxpVersion) {
+			return;
+		}
+
+		if (PSversion && satisfies(uxpVersion, "<7.0.0")) {
+			addProblem(node, `In Photoshop: enableAlerts is not supported in UXP version ${uxpVersion}. UXP version should be >=7.0.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		}
+
+		else if (InDesignVersion && satisfies(uxpVersion, "<7.3.0")) {
+			addProblem(node, `In InDesign: enableAlerts is not supported in UXP version ${uxpVersion}. UXP version should be >=7.3.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		}
+
+		else if (satisfies(uxpVersion, "<7.0.0")) {
+			addProblem(node, `enableAlerts is not supported in UXP version ${uxpVersion}. UXP version should be >=7.0.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		}
 	}
 }
 
