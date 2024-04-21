@@ -442,7 +442,7 @@ export const V5Schema: JSONSchema = {
 				"enableSWCSupport": {
 					"type": "boolean",
 					"default": true,
-					"markdownDescription": "Enable Spectrum Web Component and few other features. E.g. better bug reporting on rejected promise, CSS box-shadow and rotate in transformation",
+					"markdownDescription": "Enable Spectrum Web Component and few other features. E.g. better bug reporting on rejected promise, CSS box-shadow and rotate in transformation. Supported since UXP 7.0",
 				},
 				"enableMutationObserver": {
 					"type": "boolean",
@@ -453,6 +453,11 @@ export const V5Schema: JSONSchema = {
 					"type": "boolean",
 					"default": true,
 					"markdownDescription": "Flag required since UXP 7.4.0. InDesign support since UXP 7.3.0. Photoshop support since UXP 7.0.0.",
+				},
+				"enableFillAsCustomAttribute": {
+					"type": "boolean",
+					"default": true,
+					"markdownDescription": "Added in UXP 7.1.0 - SVGElement: The color of the fill attribute using a CSS variable will resolve as per the variable value. For now, please test this fix by enabling the feature flag in your plugin manifest. This flag will be turned on by default in the next UXP release.",
 				},
 			},
 			"markdownDescription": "A set of feature flags that can be used to enable or disable certain features of the plugin. These flags are used to gate features that are not yet ready for general availability.",
