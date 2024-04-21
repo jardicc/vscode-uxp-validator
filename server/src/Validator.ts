@@ -12,6 +12,8 @@ import globby from "globby";
 import {fileURLToPath} from "url";
 import {LSPServer} from "./LSPServer";
 import {requestClient} from "./serverRequestHandlers";
+import {unsupportedSchema} from "./manifestValidation/Schemas/unsupportedSchema";
+import {V6Schema} from "./manifestValidation/Schemas/V6Schema";
 
 export class Validator {
 
@@ -20,12 +22,14 @@ export class Validator {
 	private scssLs: style.LanguageService;
 	public jsonLs: json.LanguageService;
 
-	private readonly manifest5Uri = "foo://server/v5manifest.schema.json";
-	private readonly manifest4Uri = "foo://server/v4manifest.schema.json";
+	private readonly v6manifestUri = "foo://server/v6manifest.schema.json";
+	private readonly v5manifestUri = "foo://server/v5manifest.schema.json";
+	private readonly v4manifestUri = "foo://server/v4manifest.schema.json";
+	private readonly unsupportedManifestUri = "foo://server/unsupportedManifes.schema.json";
 
 	private _enabled = true;
 	private _manifestVersion = 5; // important
-	private manifestUri = this.manifest5Uri; // important
+	private manifestUri = this.v5manifestUri; // important
 	private _versionMatcher: VersionMatcherFromFile;
 
 	private manifestMatchPattern:string[] = ["manifest.json"];
@@ -60,14 +64,23 @@ export class Validator {
 	private assignManifestVersionFromContent(fileContent: string):void {
 		try {
 			const obj = JSON.parse(fileContent);
-			if (obj?.manifestVersion === 4) {
-				this.manifestVersion = 4;
-			} else {
-				this.manifestVersion = 5;
+			switch (obj?.manifestVersion) {
+				case 4:
+					this.manifestVersion = 4;
+					break;
+				case 5:
+					this.manifestVersion = 5;
+					break;
+				case 6:
+					this.manifestVersion = 6;
+					break;
+				default: {
+					this.manifestVersion = -1;
+				}
 			}
 		}
 		catch (e) {
-			this.manifestVersion = 5;
+			this.manifestVersion = -1;
 		}
 	}
 
@@ -86,12 +99,15 @@ export class Validator {
 	 */
 	private schemaRequestServiceHandler = (uri: string) => {
 		switch (uri) {
-			case this.manifest4Uri:
+			case this.v4manifestUri:
 				return Promise.resolve(JSON.stringify(v4Schema));
-			case this.manifest5Uri:
+			case this.v5manifestUri:
 				return Promise.resolve(JSON.stringify(V5Schema));
+			case this.v6manifestUri:
+				return Promise.resolve(JSON.stringify(V6Schema));
 			default:
-				return Promise.reject(`Unable to load schema at ${uri}`);
+				return Promise.resolve(JSON.stringify(unsupportedSchema));
+				//return Promise.reject(`Unable to load schema at ${uri}`);
 		}
 	};
 
@@ -99,10 +115,20 @@ export class Validator {
 	 * Assign scheme URI to the document
 	 */
 	private configureJsonLs() {
-		if (this.manifestVersion === 4) {
-			this.manifestUri = `foo://server/v4manifest.schema.json`;
-		} else {
-			this.manifestUri = `foo://server/v5manifest.schema.json`;
+		switch (this.manifestVersion) {
+			case 4:
+				this.manifestUri = this.v4manifestUri;
+				break;
+			case 5:
+				this.manifestUri = this.v5manifestUri;
+				break;
+			case 6:
+				this.manifestUri = this.v6manifestUri;
+				break;
+			case -1:
+			default: {
+				this.manifestUri = this.unsupportedManifestUri;
+			}
 		}
 		this.jsonLs.configure({
 			allowComments: false,

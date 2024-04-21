@@ -195,6 +195,8 @@ export function handlePermissions(node: json.ASTNode, textDocument: json.TextDoc
 
 export function handleManifestVersion(node: json.ASTNode, textDocument: json.TextDocument, diagnostic: json.Diagnostic[]): void {
 	/*
+		? manifest version 6 -> Photoshop 24.4.0 and above ?
+
 		manifest version 5 -> Photoshop 23.3.0 and above
 		manifset version 5 -> InDesign 18.5.0 and above
 		manifest version 5 -> XD 52.0.0 and above
@@ -219,6 +221,11 @@ export function handleManifestVersion(node: json.ASTNode, textDocument: json.Tex
 		if (!detectedVersions) {
 			return;
 		}
+		const UXP = LSPServer.validator.versionMatcher.commonUXP?.uxp;
+		if (!UXP) {
+			return;
+		}
+
 		const {ID, PS, XD} = detectedVersions;
 
 		if (ID) {
@@ -233,7 +240,9 @@ export function handleManifestVersion(node: json.ASTNode, textDocument: json.Tex
 				addManifestVersionProblem("Photoshop", PS, ">=22.0.0");
 			} else if (manifestVersion === 5 && !satisfies(PS, ">=23.3.0")) {
 				addManifestVersionProblem("Photoshop", PS, ">=23.3.0");
-			} else if (manifestVersion !== 4 && manifestVersion !== 5) {
+			} else if (manifestVersion === 6 && !satisfies(PS, ">=24.4.0")) {
+				addManifestVersionProblem("Photoshop", PS, ">=24.4.0");
+			} else if (manifestVersion < 4 || manifestVersion > 6) {
 				addManifestVersionProblem("Photoshop", PS);
 			}
 		}
