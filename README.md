@@ -73,6 +73,8 @@ Not all manifest parts are supported in older versions of host apps.
 - in project root run `npm run watch`
 - in Run & Debug tab in VSCode select `Launch Client` and click run
 - that is all you have to do... you can add breakpoints and inspect variables
+- after you do changes and save them... it will recompile automatically
+- press Ctrl+R in debugged VSCode to reload changes
 
 ## How make an installer for this plugin
 
