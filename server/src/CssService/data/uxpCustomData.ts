@@ -2420,53 +2420,16 @@ export const cssData: UXPCSSDataV1 = {
 			browsers: ["UXP3.0"],
 			values: [
 				{
-					name: "alias",
-					description:
-            "Indicates an alias of/shortcut to something is to be created. Often rendered as an arrow with a small curved arrow next to it.",
-				},
-				{
-					name: "all-scroll",
-					description:
-            "Indicates that the something can be scrolled in any direction. Often rendered as arrows pointing up, down, left, and right with a dot in the middle.",
-				},
-				{
 					name: "auto",
-					description:
-            "The UA determines the cursor to display based on the current context.",
-				},
-				{
-					name: "cell",
-					description:
-            "Indicates that a cell or set of cells may be selected. Often rendered as a thick plus-sign with a dot in the middle.",
-				},
-				{
-					name: "col-resize",
-					description:
-            "Indicates that the item/column can be resized horizontally. Often rendered as arrows pointing left and right with a vertical bar separating them.",
-				},
-				{
-					name: "context-menu",
-					description:
-            "A context menu is available for the object under the cursor. Often rendered as an arrow with a small menu-like graphic next to it.",
-				},
-				{
-					name: "copy",
-					description:
-            "Indicates something is to be copied. Often rendered as an arrow with a small plus sign next to it.",
+					description: "The UA determines the cursor to display based on the current context.",
 				},
 				{
 					name: "crosshair",
-					description:
-            "A simple crosshair (e.g., short line segments resembling a '+' sign). Often used to indicate a two dimensional bitmap selection mode.",
+					description: "A simple crosshair (e.g., short line segments resembling a '+' sign). Often used to indicate a two dimensional bitmap selection mode.",
 				},
 				{
 					name: "default",
-					description:
-            "The platform-dependent default cursor. Often rendered as an arrow.",
-				},
-				{
-					name: "e-resize",
-					description: "Indicates that east edge is to be moved.",
+					description: "The platform-dependent default cursor. Often rendered as an arrow.",
 				},
 				{
 					name: "ew-resize",
@@ -2474,160 +2437,47 @@ export const cssData: UXPCSSDataV1 = {
 				},
 				{
 					name: "grab",
-					browsers: ["UXP3.0"],
 					description: "Indicates that something can be grabbed.",
 				},
 				{
 					name: "grabbing",
-					browsers: ["UXP3.0"],
 					description: "Indicates that something is being grabbed.",
-				},
-				{
-					name: "help",
-					description:
-            "Help is available for the object under the cursor. Often rendered as a question mark or a balloon.",
 				},
 				{
 					name: "move",
 					description: "Indicates something is to be moved.",
 				},
 				{
-					name: "-moz-grab",
-					browsers: ["UXP3.0"],
-					description: "Indicates that something can be grabbed.",
-				},
-				{
-					name: "-moz-grabbing",
-					browsers: ["UXP3.0"],
-					description: "Indicates that something is being grabbed.",
-				},
-				{
-					name: "-moz-zoom-in",
-					browsers: ["UXP3.0"],
-					description: "Indicates that something can be zoomed (magnified) in.",
-				},
-				{
-					name: "-moz-zoom-out",
-					browsers: ["UXP3.0"],
-					description:
-            "Indicates that something can be zoomed (magnified) out.",
-				},
-				{
-					name: "ne-resize",
-					description: "Indicates that movement starts from north-east corner.",
-				},
-				{
 					name: "nesw-resize",
-					description:
-            "Indicates a bidirectional north-east/south-west cursor.",
-				},
-				{
-					name: "no-drop",
-					description:
-            "Indicates that the dragged item cannot be dropped at the current cursor location. Often rendered as a hand or pointer with a small circle with a line through it.",
-				},
-				{
-					name: "none",
-					description: "No cursor is rendered for the element.",
+					description: "Indicates a bidirectional north-east/south-west cursor.",
 				},
 				{
 					name: "not-allowed",
-					description:
-            "Indicates that the requested action will not be carried out. Often rendered as a circle with a line through it.",
-				},
-				{
-					name: "n-resize",
-					description: "Indicates that north edge is to be moved.",
+					description: "Indicates that the requested action will not be carried out. Often rendered as a circle with a line through it.",
 				},
 				{
 					name: "ns-resize",
 					description: "Indicates a bidirectional north-south cursor.",
 				},
 				{
-					name: "nw-resize",
-					description: "Indicates that movement starts from north-west corner.",
-				},
-				{
 					name: "nwse-resize",
-					description:
-            "Indicates a bidirectional north-west/south-east cursor.",
+					description: "Indicates a bidirectional north-west/south-east cursor.",
 				},
 				{
 					name: "pointer",
 					description: "The cursor is a pointer that indicates a link.",
 				},
 				{
-					name: "progress",
-					description:
-            "A progress indicator. The program is performing some processing, but is different from 'wait' in that the user may still interact with the program. Often rendered as a spinning beach ball, or an arrow with a watch or hourglass.",
-				},
-				{
-					name: "row-resize",
-					description:
-            "Indicates that the item/row can be resized vertically. Often rendered as arrows pointing up and down with a horizontal bar separating them.",
-				},
-				{
-					name: "se-resize",
-					description: "Indicates that movement starts from south-east corner.",
-				},
-				{
-					name: "s-resize",
-					description: "Indicates that south edge is to be moved.",
-				},
-				{
-					name: "sw-resize",
-					description: "Indicates that movement starts from south-west corner.",
-				},
-				{
 					name: "text",
-					description:
-            "Indicates text that may be selected. Often rendered as a vertical I-beam.",
-				},
-				{
-					name: "vertical-text",
-					description:
-            "Indicates vertical-text that may be selected. Often rendered as a horizontal I-beam.",
-				},
-				{
-					name: "wait",
-					description:
-            "Indicates that the program is busy and the user should wait. Often rendered as a watch or hourglass.",
-				},
-				{
-					name: "-webkit-grab",
-					browsers: ["UXP3.0"],
-					description: "Indicates that something can be grabbed.",
-				},
-				{
-					name: "-webkit-grabbing",
-					browsers: ["UXP3.0"],
-					description: "Indicates that something is being grabbed.",
-				},
-				{
-					name: "-webkit-zoom-in",
-					browsers: ["UXP3.0"],
-					description: "Indicates that something can be zoomed (magnified) in.",
-				},
-				{
-					name: "-webkit-zoom-out",
-					browsers: ["UXP3.0"],
-					description:
-            "Indicates that something can be zoomed (magnified) out.",
-				},
-				{
-					name: "w-resize",
-					description: "Indicates that west edge is to be moved.",
+					description: "Indicates text that may be selected. Often rendered as a vertical I-beam.",
 				},
 				{
 					name: "zoom-in",
-					browsers: ["UXP3.0"],
 					description: "Indicates that something can be zoomed (magnified) in.",
 				},
 				{
 					name: "zoom-out",
-					browsers: ["UXP3.0"],
-					description:
-            "Indicates that something can be zoomed (magnified) out.",
+					description: "Indicates that something can be zoomed (magnified) out.",
 				},
 			],
 			syntax:
