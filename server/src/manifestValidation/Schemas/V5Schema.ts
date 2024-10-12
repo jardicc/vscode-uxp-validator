@@ -438,7 +438,29 @@ export const V5Schema: JSONSchema = {
 				"enableFillAsCustomAttribute": {
 					"type": "boolean",
 					"default": true,
-					"markdownDescription": "Added in UXP 7.1.0 - SVGElement: The color of the fill attribute using a CSS variable will resolve as per the variable value. For now, please test this fix by enabling the feature flag in your plugin manifest. This flag will be turned on by default in the next UXP release.",
+					"markdownDescription": "Added in UXP 7.1.0 - SVGElement: The color of the fill attribute using a CSS variable will resolve as per the variable value. For now, please test this fix by enabling the feature flag in your plugin manifest. This flag will be turned on by default in the next UXP release. \n\n Turned on by default in `UXP 8.0.1`",
+				},
+				"CSSNextSupport": {
+
+					"oneOf": [
+						{
+							"type": "boolean",
+							"default": true,
+						},
+						{
+							"type": "array",
+							"default": ["boxShadow", "transformFunctions", "transformProperties"],
+							"items": {
+								"type": "string",
+								"enum": [
+									"boxShadow",
+									"transformFunctions",
+									"transformProperties",
+								],
+							},
+						},
+					],
+					"markdownDescription": "Enables new CSS features. \n\n Supported since UXP 8.0.1 \n\n If `enableSWCSupport` is `true`, then this flag is enabled by default.",
 				},
 			},
 			"markdownDescription": "A set of feature flags that can be used to enable or disable certain features of the plugin. These flags are used to gate features that are not yet ready for general availability.",
@@ -551,6 +573,9 @@ export const V5Schema: JSONSchema = {
 					"unevaluatedProperties": false,
 				},
 				"webview": {
+					"required": [
+						"domains","allow",
+					],
 					"properties": {
 						"domains": {
 							"oneOf": [
@@ -571,8 +596,8 @@ export const V5Schema: JSONSchema = {
 							"markdownDescription": "Enables webview access to the plugin.",
 						},
 						"allowLocalRendering": {
-							"type": "string",
-							"markdownDescription": "If webview is specified, this indicates that the webview can render local content.",
+							"const": "yes",
+							"markdownDescription": "If webview is specified, this indicates that the webview can render local content. \n\n Supported since UXP 8.0.1",
 						},
 						"enableMessageBridge": {
 							"enum": [
@@ -582,7 +607,7 @@ export const V5Schema: JSONSchema = {
 							],
 							"markdownEnumDescriptions": [
 								"Enables WebView & the content loaded on WebView to communicate via postMessage regardless of where the content is loaded from locally or remotely.",
-								"Enables WebView & the content loaded on WebView to communicate via postMessage only if the content on WebView is loaded locally",
+								"Enables WebView & the content loaded on WebView to communicate via postMessage only if the content on WebView is loaded locally \n\n Supported since UXP 8.0.1",
 								"Not allow WebView & the content loaded on WebView to communicate via postMessage",
 							],
 							"markdownDescription": "Enables WebView & the content loaded on WebView to communicate via postMessage. \n\n API: `HTMLWebViewElement.postMessage` and `window.uxpHost.postMessage`",
