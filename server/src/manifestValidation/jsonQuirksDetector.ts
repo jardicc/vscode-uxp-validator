@@ -147,6 +147,17 @@ export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument,
 			addProblem(node, `enableAlerts is not supported in UXP version ${uxpVersion}. UXP version should be >=7.0.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
 		}
 	}
+	if (node.type === "property" && node.keyNode.value === "enableFillAsCustomAttribute" && node.valueNode?.value === true) {
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+
+		if (!uxpVersion) {
+			return;
+		}
+
+		if (satisfies(uxpVersion, ">=8.0.1")) {
+			addProblem(node, `enableFillAsCustomAttribute is turned on by default since UXP version 8.0.1. You target minimal UXP version ${uxpVersion}.`, json.DiagnosticSeverity.Warning, diagnostic, textDocument);
+		}
+	}
 }
 
 export function handlePermissions(node: json.ASTNode, textDocument: json.TextDocument, diagnostic: json.Diagnostic[]): void {
