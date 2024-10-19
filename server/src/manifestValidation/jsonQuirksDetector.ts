@@ -173,6 +173,11 @@ export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument,
 		node.parent?.children?.find((child) => {
 			if (child.type === "property" && child.keyNode.value === "enableSWCSupport" && child.valueNode?.value === true) {
 				addProblem(node, `\`CSSNextSupport\` is always enabled when \`enableSWCSupport\` is enabled.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+
+				// CSSNextSupport cannot be an array if enableSWCSupport is enabled
+				if (node.valueNode?.type === "array") {
+					addProblem(node, `\`CSSNextSupport\` cannot be an array and must be set to true or omitted when \`enableSWCSupport\` is enabled.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+				}
 			}
 		});
 	}
