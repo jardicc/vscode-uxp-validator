@@ -66,7 +66,7 @@ export const versionTable:TVersionTable = {
 
 export const v8Versions:IV8Versions = {
 	"8.0.1": {
-		v8: "12.2.0.0", // ! only best guess. I can't find the exact version anywhere. Could be higher.
+		v8: "11.8.172.13",
 		es: "2024",
 		extraFeatures: [
 			"ES2025 - Iterator Helpers", // works
