@@ -3192,6 +3192,7 @@ export const cssData: UXPCSSDataV1 = {
 			name: "transform",
 			browsers: ["UXP3.0"],
 			values: [
+				// ! TODO - these are being checked in "uxpCustomData" in functionNames... not here
 				/*
 				{
 					name: "matrix()",
@@ -3492,12 +3493,14 @@ export const cssData: UXPCSSDataV1 = {
 		},
 		{
 			"name": "box-shadow",
-			"browsers": ["UXP7.3"], // ! SWC
+			"browsers": ["UXP7.3"], // ! Might need SWC feature flag.
 			"values": [
+				/*
 				{
 					"name": "inset",
 					"description": "Changes the drop shadow from an outer shadow (one that shadows the box onto the canvas, as if it were lifted above the canvas) to an inner shadow (one that shadows the canvas onto the box, as if the box were cut out of the canvas and shifted behind it).",
 				},
+				*/
 				{
 					"name": "none",
 					"description": "No shadow.",
@@ -4020,6 +4023,22 @@ export const cssData: UXPCSSDataV1 = {
 		},
 
 		{
+			name: "scale",
+			browsers: ["UXP8.0"], // ? It could been added in UXP 7.3 But it has no documentation. And I am not detective but programmer to waste time with finding out.
+		},
+		{
+			name: "rotate",
+			browsers: ["UXP8.0"], // ? It could been added in UXP 7.3 But it has no documentation. And I am not detective but programmer to waste time with finding out.
+		},
+		{
+			name: "scaleX",
+			browsers: ["UXP8.0"],
+		},
+		{
+			name: "scaleY",
+			browsers: ["UXP8.0"],
+		},
+		{
 			name: "translate",
 			browsers: ["UXP3.0"],
 		},
@@ -4036,7 +4055,7 @@ export const cssData: UXPCSSDataV1 = {
 			browsers: ["UXP2.0"],
 		},
 
-		// ! TODO rotate under SWC flag
+		// ! TODO rotate and others might need feature flags
 
 		/* other functions
 		attr()
@@ -4044,18 +4063,12 @@ export const cssData: UXPCSSDataV1 = {
 		repeating-radial-gradient()
 		repeating-conic-gradient()
 		conic-gradient()
-		translateX()
-		translateY()
 		translateZ()
-		translate()
 		translate3d()
 		rotateX()
 		rotateY()
 		rotateZ()
-		rotate()
 		rotate3d()
-		scaleX()
-		scaleY()
 		scaleZ()
 		scale()
 		scale3d()
@@ -4133,6 +4146,115 @@ export const cssData: UXPCSSDataV1 = {
 		*/
 	],
 };
+
+export const allKnownFunctionNames: string[] = [
+	"translateX",
+	"translateY",
+	"translateZ",
+	"translate",
+	"translate3d",
+	"rotateX",
+	"rotateY",
+	"rotateZ",
+	"rotate",
+	"rotate3d",
+	"scaleX",
+	"scaleY",
+	"scaleZ",
+	"scale",
+	"scale3d",
+	"skewX",
+	"skewY",
+	"skew",
+	"matrix",
+	"matrix3d",
+	"perspective",
+	"calc",
+	"min",
+	"max",
+	"clamp",
+	"round",
+	"mod",
+	"rem",
+	"sin",
+	"cos",
+	"tan",
+	"asin",
+	"acos",
+	"atan",
+	"atan2",
+	"pow",
+	"sqrt",
+	"hypot",
+	"log",
+	"exp",
+	"abs",
+	"sign",
+	"blur",
+	"brightness",
+	"contrast",
+	"drop-shadow",
+	"grayscale",
+	"hue-rotate",
+	"invert",
+	"opacity",
+	"saturate",
+	"sepia",
+	"rgb",
+	"hsl",
+	"hwb",
+	"lch",
+	"oklch",
+	"lab",
+	"oklab",
+	"color",
+	"color-mix",
+	"color-contrast",
+	"device-cmyk",
+	"light-dark",
+	"linear-gradient",
+	"radial-gradient",
+	"conic-gradient",
+	"repeating-linear-gradient",
+	"repeating-radial-gradient",
+	"repeating-conic-gradient",
+	"image",
+	"image-set",
+	"cross-fade",
+	"element",
+	"paint",
+	"counter",
+	"counters",
+	"symbols",
+	"circle",
+	"ellipse",
+	"inset",
+	"rect",
+	"xywh",
+	"polygon",
+	"path",
+	"shape",
+	"attr",
+	"env",
+	"var",
+	"fit-content",
+	"minmax",
+	"repeat",
+	"stylistic",
+	"styleset",
+	"character-variant",
+	"swash",
+	"ornaments",
+	"annotation",
+	"linear",
+	"cubic-bezier",
+	"steps",
+	"scroll",
+	"view",
+	"anchor",
+	"anchor-size",
+	"url",
+];
 
 /*
 
