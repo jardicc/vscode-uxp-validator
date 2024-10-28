@@ -3191,114 +3191,98 @@ export const cssData: UXPCSSDataV1 = {
 		{
 			name: "transform",
 			browsers: ["UXP3.0"],
-			// ! TODO
 			values: [
+				// ! TODO - these are being checked in "uxpCustomData" in functionNames... not here
+				/*
 				{
 					name: "matrix()",
-					description:
-            "Specifies a 2D transformation in the form of a transformation matrix of six values. matrix(a,b,c,d,e,f) is equivalent to applying the transformation matrix [a b c d e f]",
+					description: "Specifies a 2D transformation in the form of a transformation matrix of six values. matrix(a,b,c,d,e,f) is equivalent to applying the transformation matrix [a b c d e f]",
 				},
 				{
 					name: "matrix3d()",
-					description:
-            "Specifies a 3D transformation as a 4x4 homogeneous matrix of 16 values in column-major order.",
-				},
-				{
-					name: "none",
+					description: "Specifies a 3D transformation as a 4x4 homogeneous matrix of 16 values in column-major order.",
 				},
 				{
 					name: "perspective()",
 					description: "Specifies a perspective projection matrix.",
 				},
 				{
-					name: "rotate()",
-					description:
-            "Specifies a 2D rotation by the angle specified in the parameter about the origin of the element, as defined by the transform-origin property.",
-				},
-				{
 					name: "rotate3d()",
-					description:
-            "Specifies a clockwise 3D rotation by the angle specified in last parameter about the [x,y,z] direction vector described by the first 3 parameters.",
+					description: "Specifies a clockwise 3D rotation by the angle specified in last parameter about the [x,y,z] direction vector described by the first 3 parameters.",
 				},
 				{
 					name: "rotateX('angle')",
-					description:
-            "Specifies a clockwise rotation by the given angle about the X axis.",
+					description: "Specifies a clockwise rotation by the given angle about the X axis.",
 				},
 				{
 					name: "rotateY('angle')",
-					description:
-            "Specifies a clockwise rotation by the given angle about the Y axis.",
+					description: "Specifies a clockwise rotation by the given angle about the Y axis.",
 				},
 				{
 					name: "rotateZ('angle')",
-					description:
-            "Specifies a clockwise rotation by the given angle about the Z axis.",
-				},
-				{
-					name: "scale()",
-					description:
-            "Specifies a 2D scale operation by the [sx,sy] scaling vector described by the 2 parameters. If the second parameter is not provided, it is takes a value equal to the first.",
+					description: "Specifies a clockwise rotation by the given angle about the Z axis.",
 				},
 				{
 					name: "scale3d()",
-					description:
-            "Specifies a 3D scale operation by the [sx,sy,sz] scaling vector described by the 3 parameters.",
-				},
-				{
-					name: "scaleX()",
-					description:
-            "Specifies a scale operation using the [sx,1] scaling vector, where sx is given as the parameter.",
-				},
-				{
-					name: "scaleY()",
-					description:
-            "Specifies a scale operation using the [sy,1] scaling vector, where sy is given as the parameter.",
+					description: "Specifies a 3D scale operation by the [sx,sy,sz] scaling vector described by the 3 parameters.",
 				},
 				{
 					name: "scaleZ()",
-					description:
-            "Specifies a scale operation using the [1,1,sz] scaling vector, where sz is given as the parameter.",
+					description: "Specifies a scale operation using the [1,1,sz] scaling vector, where sz is given as the parameter.",
 				},
 				{
 					name: "skew()",
-					description:
-            "Specifies a skew transformation along the X and Y axes. The first angle parameter specifies the skew on the X axis. The second angle parameter specifies the skew on the Y axis. If the second parameter is not given then a value of 0 is used for the Y angle (ie: no skew on the Y axis).",
+					description: "Specifies a skew transformation along the X and Y axes. The first angle parameter specifies the skew on the X axis. The second angle parameter specifies the skew on the Y axis. If the second parameter is not given then a value of 0 is used for the Y angle (ie: no skew on the Y axis).",
 				},
 				{
 					name: "skewX()",
-					description:
-            "Specifies a skew transformation along the X axis by the given angle.",
+					description: "Specifies a skew transformation along the X axis by the given angle.",
 				},
 				{
 					name: "skewY()",
-					description:
-            "Specifies a skew transformation along the Y axis by the given angle.",
-				},
-				{
-					name: "translate()",
-					description:
-            "Specifies a 2D translation by the vector [tx, ty], where tx is the first translation-value parameter and ty is the optional second translation-value parameter.",
+					description: "Specifies a skew transformation along the Y axis by the given angle.",
 				},
 				{
 					name: "translate3d()",
-					description:
-            "Specifies a 3D translation by the vector [tx,ty,tz], with tx, ty and tz being the first, second and third translation-value parameters respectively.",
-				},
-				{
-					name: "translateX()",
-					description:
-            "Specifies a translation by the given amount in the X direction.",
-				},
-				{
-					name: "translateY()",
-					description:
-            "Specifies a translation by the given amount in the Y direction.",
+					description: "Specifies a 3D translation by the vector [tx,ty,tz], with tx, ty and tz being the first, second and third translation-value parameters respectively.",
 				},
 				{
 					name: "translateZ()",
-					description:
-            "Specifies a translation by the given amount in the Z direction. Note that percentage values are not allowed in the translateZ translation-value, and if present are evaluated as 0.",
+					description: "Specifies a translation by the given amount in the Z direction. Note that percentage values are not allowed in the translateZ translation-value, and if present are evaluated as 0.",
+				},
+				*/
+				{
+					name: "none",
+				},
+				{
+					name: "rotate()",
+					description: "Specifies a 2D rotation by the angle specified in the parameter about the origin of the element, as defined by the transform-origin property.",
+				},
+				{
+					name: "scale()",
+					description: "Specifies a 2D scale operation by the [sx,sy] scaling vector described by the 2 parameters. If the second parameter is not provided, it is takes a value equal to the first.",
+				},
+				{
+					name: "scaleX()",
+					description: "Specifies a scale operation using the [sx,1] scaling vector, where sx is given as the parameter.",
+					browsers: ["UXP8.0"],
+				},
+				{
+					name: "scaleY()",
+					description: "Specifies a scale operation using the [sy,1] scaling vector, where sy is given as the parameter.",
+					browsers: ["UXP8.0"],
+				},
+				{
+					name: "translate()",
+					description: "Specifies a 2D translation by the vector [tx, ty], where tx is the first translation-value parameter and ty is the optional second translation-value parameter.",
+				},
+				{
+					name: "translateX()",
+					description: "Specifies a translation by the given amount in the X direction.",
+				},
+				{
+					name: "translateY()",
+					description: "Specifies a translation by the given amount in the Y direction.",
 				},
 			],
 			syntax: "none | <transform-list>",
@@ -3309,9 +3293,39 @@ export const cssData: UXPCSSDataV1 = {
 					url: "https://developer.mozilla.org/docs/Web/CSS/transform",
 				},
 			],
-			description:
-        "A two-dimensional transformation is applied to an element through the 'transform' property. This property contains a list of transform functions similar to those allowed by SVG.",
+			description: "A two-dimensional transformation is applied to an element through the 'transform' property. This property contains a list of transform functions similar to those allowed by SVG.",
 			restrictions: ["enum"],
+		},
+		{
+			name: "transform-origin",
+			browsers: ["UXP8.0"],
+			syntax: "[ <length-percentage> | left | center | right | top | bottom ] | [ [ <length-percentage> | left | center | right ] && [ <length-percentage> | top | center | bottom ] ] <length>?",
+			relevance: 74,
+			references: [
+				{
+					"name": "MDN Reference",
+					"url": "https://developer.mozilla.org/docs/Web/CSS/transform-origin",
+				},
+			],
+			description: "Establishes the origin of transformation for an element.",
+			restrictions: [
+				"position",
+				"length",
+				"percentage",
+			],
+		},
+		{
+			name: "translate",
+			syntax: "none | <length-percentage> [ <length-percentage> <length>? ]?",
+			relevance: 50,
+			browsers: ["UXP8.0"],
+			references: [
+				{
+					"name": "MDN Reference",
+					"url": "https://developer.mozilla.org/docs/Web/CSS/translate",
+				},
+			],
+			description: "The translate CSS property allows you to specify translation transforms individually and independently of the transform property. This maps better to typical user interface usage, and saves having to remember the exact order of transform functions to specify in the transform value.",
 		},
 		{
 			name: "vertical-align",
@@ -3479,12 +3493,14 @@ export const cssData: UXPCSSDataV1 = {
 		},
 		{
 			"name": "box-shadow",
-			"browsers": ["UXP7.3"], // ! SWC
+			"browsers": ["UXP7.3"], // ! Might need SWC feature flag.
 			"values": [
+				/*
 				{
 					"name": "inset",
 					"description": "Changes the drop shadow from an outer shadow (one that shadows the box onto the canvas, as if it were lifted above the canvas) to an inner shadow (one that shadows the canvas onto the box, as if the box were cut out of the canvas and shifted behind it).",
 				},
+				*/
 				{
 					"name": "none",
 					"description": "No shadow.",
@@ -4007,6 +4023,22 @@ export const cssData: UXPCSSDataV1 = {
 		},
 
 		{
+			name: "scale",
+			browsers: ["UXP8.0"], // ? It could been added in UXP 7.3 But it has no documentation. And I am not detective but programmer to waste time with finding out.
+		},
+		{
+			name: "rotate",
+			browsers: ["UXP8.0"], // ? It could been added in UXP 7.3 But it has no documentation. And I am not detective but programmer to waste time with finding out.
+		},
+		{
+			name: "scaleX",
+			browsers: ["UXP8.0"],
+		},
+		{
+			name: "scaleY",
+			browsers: ["UXP8.0"],
+		},
+		{
 			name: "translate",
 			browsers: ["UXP3.0"],
 		},
@@ -4023,7 +4055,7 @@ export const cssData: UXPCSSDataV1 = {
 			browsers: ["UXP2.0"],
 		},
 
-		// ! TODO rotate under SWC flag
+		// ! TODO rotate and others might need feature flags
 
 		/* other functions
 		attr()
@@ -4031,18 +4063,12 @@ export const cssData: UXPCSSDataV1 = {
 		repeating-radial-gradient()
 		repeating-conic-gradient()
 		conic-gradient()
-		translateX()
-		translateY()
 		translateZ()
-		translate()
 		translate3d()
 		rotateX()
 		rotateY()
 		rotateZ()
-		rotate()
 		rotate3d()
-		scaleX()
-		scaleY()
 		scaleZ()
 		scale()
 		scale3d()
@@ -4120,6 +4146,115 @@ export const cssData: UXPCSSDataV1 = {
 		*/
 	],
 };
+
+export const allKnownFunctionNames: string[] = [
+	"translateX",
+	"translateY",
+	"translateZ",
+	"translate",
+	"translate3d",
+	"rotateX",
+	"rotateY",
+	"rotateZ",
+	"rotate",
+	"rotate3d",
+	"scaleX",
+	"scaleY",
+	"scaleZ",
+	"scale",
+	"scale3d",
+	"skewX",
+	"skewY",
+	"skew",
+	"matrix",
+	"matrix3d",
+	"perspective",
+	"calc",
+	"min",
+	"max",
+	"clamp",
+	"round",
+	"mod",
+	"rem",
+	"sin",
+	"cos",
+	"tan",
+	"asin",
+	"acos",
+	"atan",
+	"atan2",
+	"pow",
+	"sqrt",
+	"hypot",
+	"log",
+	"exp",
+	"abs",
+	"sign",
+	"blur",
+	"brightness",
+	"contrast",
+	"drop-shadow",
+	"grayscale",
+	"hue-rotate",
+	"invert",
+	"opacity",
+	"saturate",
+	"sepia",
+	"rgb",
+	"hsl",
+	"hwb",
+	"lch",
+	"oklch",
+	"lab",
+	"oklab",
+	"color",
+	"color-mix",
+	"color-contrast",
+	"device-cmyk",
+	"light-dark",
+	"linear-gradient",
+	"radial-gradient",
+	"conic-gradient",
+	"repeating-linear-gradient",
+	"repeating-radial-gradient",
+	"repeating-conic-gradient",
+	"image",
+	"image-set",
+	"cross-fade",
+	"element",
+	"paint",
+	"counter",
+	"counters",
+	"symbols",
+	"circle",
+	"ellipse",
+	"inset",
+	"rect",
+	"xywh",
+	"polygon",
+	"path",
+	"shape",
+	"attr",
+	"env",
+	"var",
+	"fit-content",
+	"minmax",
+	"repeat",
+	"stylistic",
+	"styleset",
+	"character-variant",
+	"swash",
+	"ornaments",
+	"annotation",
+	"linear",
+	"cubic-bezier",
+	"steps",
+	"scroll",
+	"view",
+	"anchor",
+	"anchor-size",
+	"url",
+];
 
 /*
 

@@ -103,6 +103,14 @@ export function handlePSApiVersion(node: json.ASTNode, textDocument: json.TextDo
 }
 
 export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument, diagnostic: json.Diagnostic[]): void {
+
+	// If we are not directly in the featureFlags object, return (nested featureFlags are not supported)
+	const nodePath = getNodePath(node);
+	if (!nodePath.includes("featureFlags")) {
+		return;
+	}
+
+
 	/*
 		enableSWCSupport 7.0
 	*/
@@ -126,6 +134,7 @@ export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument,
 			addProblem(node, `enableSWCSupport is not supported in UXP version ${uxpVersion}. UXP version should be >=7.0.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
 		}
 	}
+	// Enable alerts
 	if (node.type === "property" && node.keyNode.value === "enableAlerts" && node.valueNode?.value === true) {
 		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
 		const PSversion = LSPServer.validator.versionMatcher?.detectedVersions?.PS;
@@ -146,6 +155,31 @@ export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument,
 		else if (satisfies(uxpVersion, "<7.0.0")) {
 			addProblem(node, `enableAlerts is not supported in UXP version ${uxpVersion}. UXP version should be >=7.0.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
 		}
+	}
+	// Enable fill as custom attribute
+	if (node.type === "property" && node.keyNode.value === "enableFillAsCustomAttribute" && node.valueNode?.value === true) {
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+
+		if (!uxpVersion) {
+			return;
+		}
+
+		if (satisfies(uxpVersion, ">=8.0.1")) {
+			addProblem(node, `You don't need this. \`enableFillAsCustomAttribute\` is turned on by default since UXP version 8.0.1. You target minimal UXP version ${uxpVersion}.`, json.DiagnosticSeverity.Warning, diagnostic, textDocument);
+		}
+	}
+	// Enable SWC support overrides CSS Next Support
+	if (node.type === "property" && node.keyNode.value === "CSSNextSupport") {
+		node.parent?.children?.find((child) => {
+			if (child.type === "property" && child.keyNode.value === "enableSWCSupport" && child.valueNode?.value === true) {
+				addProblem(node, `\`CSSNextSupport\` is always enabled when \`enableSWCSupport\` is enabled.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+
+				// CSSNextSupport cannot be an array if enableSWCSupport is enabled
+				if (node.valueNode?.type === "array") {
+					addProblem(node, `\`CSSNextSupport\` cannot be an array and must be set to true or omitted when \`enableSWCSupport\` is enabled.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+				}
+			}
+		});
 	}
 }
 
@@ -190,7 +224,28 @@ export function handlePermissions(node: json.ASTNode, textDocument: json.TextDoc
 			addProblem(node, `enableAddon is not supported in UXP version ${psVersion}. UXP version should be >=24.2.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
 		}
 	}
+	if (node.type === "property" && node.keyNode.value === "allowLocalRendering") {
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
 
+		if (!uxpVersion) {
+			return;
+		}
+
+		if (satisfies(uxpVersion, "<8.0.1")) {
+			addProblem(node, `allowLocalRendering is not supported in UXP version ${uxpVersion}. UXP version should be >=8.0.1`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		}
+	}
+	if (node.type === "property" && node.keyNode.value === "enableMessageBridge" && node.valueNode?.value === "localOnly") {
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+
+		if (!uxpVersion) {
+			return;
+		}
+
+		if (satisfies(uxpVersion, "<8.0.1")) {
+			addProblem(node, `"localOnly" value is not supported in UXP version ${uxpVersion}. UXP version should be >=8.0.1`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		}
+	}
 }
 
 export function handleManifestVersion(node: json.ASTNode, textDocument: json.TextDocument, diagnostic: json.Diagnostic[]): void {

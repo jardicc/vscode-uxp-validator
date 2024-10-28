@@ -2,7 +2,8 @@ import {THostApp} from "./types";
 
 export const versionTable:TVersionTable = {
 	PS: {
-		"25.5.0": {uxp: "7.4.0", date: new Date("Feb 2024")}, // February 2024 (version 25.5) release
+		"26.0.0": {uxp: "8.0.1", date: new Date("Oct 2024")}, //
+		"25.5.0": {uxp: "7.4.0", date: new Date("Feb 2024")}, //
 		"25.2.0": {uxp: "7.3.0", date: new Date("Now 2023")}, // check the date
 		"25.0.0": {uxp: "7.2.0", date: new Date("Sep 2023")},
 		"24.6.0": {uxp: "7.1.0", date: new Date("Apr 2023")}, // June 2023 (version 24.6) release
@@ -34,6 +35,7 @@ export const versionTable:TVersionTable = {
 		*/
 	},
 	ID: {
+		"20.0.0": {uxp: "8.0.1", date: new Date("Oct 2024")},
 		"19.0.0": {uxp: "7.3.1", date: new Date("Sep 2023")},
 		"18.5.0": {uxp: "7.1.0", date: new Date("Jun 2023")},
 	},
@@ -60,11 +62,26 @@ export const versionTable:TVersionTable = {
 
 };
 
+// See https://compat-table.github.io/compat-table/es2016plus/ for overview of ES features
+
 export const v8Versions:IV8Versions = {
+	"8.0.1": {
+		v8: "11.8.172.13",
+		es: "2024",
+		extraFeatures: [
+			"ES2025 - Iterator Helpers", // works
+		],
+		missingFeatures: [
+			"ES2025 - Duplicate named capturing groups",
+			"ES2025 - Set methods",
+			"ES2025 - RegExp Pattern Modifiers",
+			// not about Unicode and Regexp
+		],
+	}, // Oct 27 2021
 	"6.0.0": {
 		v8: "9.4.146.24",
 		es: "2022",
-		notes: [
+		missingFeatures: [
 			"ES2018 - RegExp Unicode 15 Property Escapes",
 			"ES2018 - RegExp Unicode 15.1 Property Escapes",
 			"ES2022 - RegExp Match Indices (`hasIndices` / `d` flag) > shows up in flags",
@@ -74,7 +91,7 @@ export const v8Versions:IV8Versions = {
 	"5.1.0": {
 		v8: "8.9.255.20",
 		es: "2021",
-		notes: [
+		missingFeatures: [
 			"ES2018 - RegExp Unicode 14 Property Escapes",
 			"ES2018 - RegExp Unicode 15 Property Escapes",
 			"ES2018 - RegExp Unicode 15.1 Property Escapes",
@@ -85,7 +102,7 @@ export const v8Versions:IV8Versions = {
 	"5.0.0": {
 		v8: "8.8.278.14",
 		es: "2021",
-		notes: [
+		missingFeatures: [
 			"ES2018 - RegExp Unicode 14 Property Escapes",
 			"ES2018 - RegExp Unicode 15 Property Escapes",
 			"ES2018 - RegExp Unicode 15.1 Property Escapes",
@@ -96,7 +113,7 @@ export const v8Versions:IV8Versions = {
 	"4.3.0": {
 		v8: "8.3.110.13",
 		es: "2020",
-		notes: [
+		missingFeatures: [
 			"ES2018 - RegExp Unicode 14 Property Escapes",
 			"ES2018 - RegExp Unicode 15 Property Escapes",
 			"ES2018 - RegExp Unicode 15.1 Property Escapes",
@@ -124,7 +141,8 @@ export interface IV8Item{
 	uxp?: string
 	es: string
 	v8: string
-	notes?: string[]
+	missingFeatures?: string[]
+	extraFeatures?: string[]
 }
 
 /*
