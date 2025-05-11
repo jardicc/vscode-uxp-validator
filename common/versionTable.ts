@@ -2,6 +2,7 @@ import {THostApp} from "./types";
 
 export const versionTable:TVersionTable = {
 	PS: {
+		"26.1.0": {uxp: "8.1.0", date: new Date("Nov 2024")}, //
 		"26.0.0": {uxp: "8.0.1", date: new Date("Oct 2024")}, //
 		"25.5.0": {uxp: "7.4.0", date: new Date("Feb 2024")}, //
 		"25.2.0": {uxp: "7.3.0", date: new Date("Now 2023")}, // check the date
@@ -21,7 +22,6 @@ export const versionTable:TVersionTable = {
 		"22.4.0": {uxp: "5.0.1", date: new Date("May 2021")}, // Version 22.4 was released in May 2021.
 		"22.2.0": {uxp: "4.3.2", date: new Date("Feb 2021")}, // Version 22.2 was released in Feb 2021.
 		"21.1.0": {uxp: "3.4.2", date: new Date("Feb 2020")}, // Version 21.1 was released in Feb 2020.
-
 		/*
 			Version 24.7 was released on July 27, 2023.
 			May 2023 (version 24.5) release
@@ -33,6 +33,9 @@ export const versionTable:TVersionTable = {
 			Version 22.3 was released in March 2021. This is the first macOS release to run natively on Apple silicon.[69]
 			Version 22.3.1 was released in April 2021.
 		*/
+	},
+	premierepro: {
+		"25.2.0": {uxp: "8.1.0", date: new Date("Dec 2024")},
 	},
 	ID: {
 		"20.0.0": {uxp: "8.0.1", date: new Date("Oct 2024")},
@@ -57,7 +60,6 @@ export const versionTable:TVersionTable = {
 		"29.0.32": {uxp: "3.4.4", date: new Date("May 2020")},
 		"28.0.0": {uxp: "3.3.9", date: new Date("Mar 2020")},
 		"21.0.12": {uxp: "3.0.0", date: new Date("Jul 2019")},
-
 	},
 
 };

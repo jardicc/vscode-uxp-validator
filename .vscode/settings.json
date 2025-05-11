@@ -29,6 +29,7 @@
 	"eslint.lintTask.enable": true,
 	"eslint.format.enable": true,
 	"cSpell.words": [
+		"premierepro",
 		"uxpvalidator"
 	],
 }

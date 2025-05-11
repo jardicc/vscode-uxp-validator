@@ -311,18 +311,19 @@ export const V5Schema: JSONSchema = {
 		"hostObject": {
 			"properties": {
 				"app": {
-					// "type": "string",
 					"enum": [
 						"XD",
 						"PS",
 						"ID",
+						"premierepro",
 					],
 					"markdownEnumDescriptions": [
 						"Adobe XD",
 						"Adobe Photoshop",
 						"Adobe InDesign",
+						"Adobe Premiere Pro",
 					],
-					"markdownDescription": "Indicates the supported application for this plugin (currently, the only valid values here are `ID`, `XD` and `PS`).",
+					"markdownDescription": "Indicates the supported application for this plugin (currently, the only valid values here are `ID`, `XD`, `PS` and `premierepro`).",
 				},
 				"minVersion": {
 					"type": "string",
