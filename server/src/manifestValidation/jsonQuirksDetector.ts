@@ -164,8 +164,8 @@ export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument,
 			return;
 		}
 
-		if (satisfies(uxpVersion, ">=8.0.1")) {
-			addProblem(node, `You don't need this. \`enableFillAsCustomAttribute\` is turned on by default since UXP version 8.0.1. You target minimal UXP version ${uxpVersion}.`, json.DiagnosticSeverity.Warning, diagnostic, textDocument);
+		if (satisfies(uxpVersion, ">=8.1.0")) {
+			addProblem(node, `You don't need this. \`enableFillAsCustomAttribute\` is turned on by default since UXP version 8.1.0. You target minimal UXP version ${uxpVersion}.`, json.DiagnosticSeverity.Warning, diagnostic, textDocument);
 		}
 	}
 	// Enable SWC support overrides CSS Next Support
