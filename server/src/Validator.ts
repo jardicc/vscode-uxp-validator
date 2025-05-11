@@ -259,6 +259,18 @@ export class Validator {
 	}
 
 	private inlineHintExperiment(document?: json.TextDocument, jsonDocument?: json.JSONDocument) {
+		LSPServer.connection.languages.inlayHint.resolve((hint) => {
+			if(typeof hint.label === "string"){
+				hint.label = [InlayHintLabelPart.create(hint.label)];
+			}
+			for (let i = 0; i < hint.label.length; i++) {
+				let value = hint.label[i].value;
+				value = value.replace(" = ", "").split("|").map(str=>str.trim()).join("\n");
+				hint.label[i].tooltip = value;
+			}
+			return hint;
+		});
+
 		LSPServer.connection.languages.inlayHint.on((arg) => {
 			if (!this.enabled) {
 				return [];
@@ -278,11 +290,9 @@ export class Validator {
 			return res;
 		});
 
-		LSPServer.connection.languages.inlayHint.resolve((hint) => {
-			(hint.label as InlayHintLabelPart[])[0].tooltip = "tooltip";
-			hint.textEdits = [TextEdit.insert(Position.create(1, 1), "number")];
-			return hint;
-		});
+
+
+
 	}
 
 	/**
