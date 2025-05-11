@@ -187,6 +187,7 @@ class _VersionMatcherFromFile extends VersionMatcher {
 				ID: getVersion("ID"),
 				PS: getVersion("PS"),
 				XD: getVersion("XD"),
+				premierepro: getVersion("premierepro"),
 			};
 
 			super(detectedVersions, settings);

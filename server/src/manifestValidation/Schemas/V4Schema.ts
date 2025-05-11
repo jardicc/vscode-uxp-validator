@@ -213,7 +213,15 @@ export const v4Schema = {
 		"hostObject": {
 			"properties": {
 				"app": {
-					"type": "string",
+					"enum": [
+						"XD",
+						"PS",
+					],
+					"markdownEnumDescriptions": [
+						"Adobe XD",
+						"Adobe Photoshop",
+					],
+					"markdownDescription": "Indicates the supported application for this plugin (currently, the only valid values here are `XD`, `PS`). Use higher manifest version for other apps.",
 				},
 				"minVersion": {
 					"type": "string",
