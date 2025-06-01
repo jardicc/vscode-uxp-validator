@@ -9,6 +9,7 @@
 			"runtimeExecutable": "${execPath}",
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--disable-extensions",
 				"--inspect"
 			],
 			"autoAttachChildProcesses": true,
