@@ -14,6 +14,7 @@ import {LSPServer} from "./LSPServer";
 import {requestClient} from "./serverRequestHandlers";
 import {unsupportedSchema} from "./manifestValidation/Schemas/unsupportedSchema";
 import {V6Schema} from "./manifestValidation/Schemas/V6Schema";
+import {jsonrepair} from "jsonrepair";
 
 export class Validator {
 
@@ -63,7 +64,8 @@ export class Validator {
 	 */
 	private assignManifestVersionFromContent(fileContent: string):void {
 		try {
-			const obj = JSON.parse(fileContent);
+			const repairedJSON = jsonrepair(fileContent);
+			const obj = JSON.parse(repairedJSON);
 			switch (obj?.manifestVersion) {
 				case 4:
 					this.manifestVersion = 4;
@@ -254,18 +256,19 @@ export class Validator {
 		);
 		await Promise.allSettled(promises);
 		// clean inlay hints
-		//LSPServer.connection.languages.inlayHint.on(() => []);
+		console.log("clean inlay hints");
 		this.inlineHintExperiment();
 	}
 
 	private inlineHintExperiment(document?: json.TextDocument, jsonDocument?: json.JSONDocument) {
+
 		LSPServer.connection.languages.inlayHint.resolve((hint) => {
-			if(typeof hint.label === "string"){
+			if (typeof hint.label === "string") {
 				hint.label = [InlayHintLabelPart.create(hint.label)];
 			}
 			for (let i = 0; i < hint.label.length; i++) {
 				let value = hint.label[i].value;
-				value = value.replace(" = ", "").split("|").map(str=>str.trim()).join("\n");
+				value = value.replace(" = ", "").split("|").map(str => str.trim()).join("\n");
 				hint.label[i].tooltip = value;
 			}
 			return hint;
@@ -289,10 +292,6 @@ export class Validator {
 			const res = makeInlayHints(document, jsonDocument as JSONDocument, this._versionMatcher);
 			return res;
 		});
-
-
-
-
 	}
 
 	/**
@@ -304,8 +303,6 @@ export class Validator {
 		if (!this.enabled) {
 			return;
 		}
-		console.log("update");
-		console.time("update");
 		switch (document.languageId) {
 			case "css":
 			case "less":
@@ -343,6 +340,5 @@ export class Validator {
 				break;
 			}
 		}
-		console.timeEnd("update");
 	}
 }

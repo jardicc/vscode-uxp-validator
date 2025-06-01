@@ -2,7 +2,7 @@
   "name": "uxpvalidator",
   "displayName": "Validator for UXP",
   "description": "Validates CSS, LESS & SCSS for UXP. Intellisense and validation for Manifest.json. Please report any issues on GitHub or rate plugin",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "author": "Jaroslav Bereza",
   "publisher": "JaroslavBereza",
   "license": "MIT",
@@ -12,10 +12,25 @@
     "url": "https://github.com/jardicc/vscode-uxp-validator"
   },
   "keywords": [
-    "UXP", "Adobe", "Photoshop", "InDesign", "XD", "Plugin", "Extension", "Validator", "Intellisense", "Validation", "CSS", "LESS", "SCSS", "Manifest.json"
+    "UXP",
+    "Adobe",
+    "Photoshop",
+    "InDesign",
+    "XD",
+    "Plugin",
+    "Extension",
+    "Validator",
+    "Intellisense",
+    "Validation",
+    "CSS",
+    "LESS",
+    "SCSS",
+    "Manifest.json"
   ],
   "categories": [
-    "Linters", "Programming Languages", "Other"
+    "Linters",
+    "Programming Languages",
+    "Other"
   ],
   "engines": {
     "vscode": "^1.74.0"
@@ -94,6 +109,7 @@
     "@vscode/l10n": "^0.0.16",
     "@vscode/test-web": "^0.0.22",
     "jsonc-parser": "^3.2.0",
+    "jsonrepair": "^3.12.0",
     "lodash": "^4.17.21",
     "merge-options": "^3.0.4",
     "mocha": "^10.2.0",
