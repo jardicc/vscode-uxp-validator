@@ -19,10 +19,9 @@ export class LSPServer{
 	public static async startServer() {
 		LSPServer.connection = vs.createConnection();
 		const connection = LSPServer.connection;
-		connection.console.info(`Sample server running in node ${process.version}`);
+		connection.console.info(`UXP Validator LSP server running in node ${process.version}`);
 
-		LSPServer.documents = new vs.TextDocuments(TextDocument);
-		LSPServer.documents.listen(connection);
+
 
 		connection.onInitialize(LSPServer.onInitialize);
 
@@ -49,6 +48,8 @@ export class LSPServer{
 			return item;
 		});
 
+		LSPServer.documents = new vs.TextDocuments(TextDocument);
+		LSPServer.documents.listen(connection);
 		connection.listen(); // After all is prepared
 
 	}
@@ -92,24 +93,26 @@ export class LSPServer{
 	}, 0);
 
 	private static async onInitialized() {
+		console.log("Server initialized start");
 		await LSPServer.fetchSettings();
-		LSPServer.validator = new Validator(); // TODO improve instantiation
-		LSPServer.validator.start();
-
 		// Set how to handle requests from client
 		setServerRequestHandlers(LSPServer.connection);
+		LSPServer.validator = new Validator(); // TODO improve instantiation
+		await LSPServer.validator.start();
 
 		/**
 		 * Validate newly opened document by default
 		 */
-		LSPServer.documents.onDidOpen((event) => {
-			LSPServer.validator.update(event.document);
+		LSPServer.documents.onDidOpen(async (event) => {
+			await LSPServer.validator.update(event.document);
 		});
 
 		LSPServer.documents.onDidChangeContent(LSPServer.onDidChangeContentDebounced);
 
 		// Send messages to client once server is ready
 		LSPServer.updateClientUI();
+
+		console.log("Server initialized done");
 	}
 
 	private static updateClientUI() {
@@ -122,7 +125,7 @@ export class LSPServer{
 		LSPServer.settings = config;
 	}
 
-	private static async onHover(textDocumentPosition: vs.HoverParams) {
+	private static async onHover(textDocumentPosition: vs.HoverParams): Promise<vs.Hover | null> {
 		if (!LSPServer.validator.enabled) {
 			return null;
 		}
@@ -135,7 +138,7 @@ export class LSPServer{
 		switch (document.languageId) {
 			case "json": {
 				const jsonDocument = LSPServer.getJSONDocument(document);
-				const res = LSPServer.validator.jsonLs.doHover(document, textDocumentPosition.position, jsonDocument);
+				const res = await LSPServer.validator.jsonLs.doHover(document, textDocumentPosition.position, jsonDocument);
 				return res;
 			}
 			default: {
@@ -179,6 +182,8 @@ export class LSPServer{
 	}
 
 	private static onInitialize() {
+		console.log("Server initialize");
+
 		const res: vs.InitializeResult = {
 			capabilities: {
 				completionProvider: {
@@ -198,6 +203,7 @@ export class LSPServer{
 						},
 					],
 					resolveProvider: true,
+					id: "uxpManifestInlayHints",
 				},
 				inlineValueProvider: {
 					documentSelector: [{
@@ -206,9 +212,6 @@ export class LSPServer{
 					}],
 				},
 				hoverProvider: true,
-				executeCommandProvider: {
-					commands: ["sample.fixMe"],
-				},
 				workspace: {
 					workspaceFolders: {
 						supported: true,

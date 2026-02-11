@@ -1,3 +1,4 @@
+import {jsonrepair} from "jsonrepair";
 import {ICommonUXP, IFirstSafeAppVersion, IHostApp, ISafeAppVersion, ISettings, TDetectedVersions, THostApp, supportedApps} from "./types";
 import {IV8Item, v8Versions, versionTable} from "./versionTable";
 import {maxSatisfying, compare, rcompare} from "semver";
@@ -160,7 +161,8 @@ class _VersionMatcherFromFile extends VersionMatcher {
 				this._fileLoadOK = true;
 				return;
 			}
-			const manifest = JSON.parse(content);
+			const repairedJSON = jsonrepair(content);
+			const manifest = JSON.parse(repairedJSON);
 
 			const host: IHostApp[] | IHostApp = manifest?.host;
 

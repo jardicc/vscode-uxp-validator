@@ -35,6 +35,7 @@ export function makeInlayHints(document: json.TextDocument, jsonDocument: JSONDo
 			const one = InlayHint.create(pos, [hintLabel], InlayHintKind.Parameter);
 			one.data = "1";
 			res.push(one);
+			return false; // Do not visit children
 		}
 
 
