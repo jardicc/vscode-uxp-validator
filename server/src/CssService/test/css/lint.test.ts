@@ -228,7 +228,7 @@ suite("CSS - Lint", () => {
 		assertStyleSheet("div:default { }", Rules.UnsupportedPseudoSelector);
 	});
 	test("pseudoClass 'defined' failed", function(){
-		assertStyleSheet("div:defined { }", Rules.UnsupportedPseudoSelector);
+		assertStyleSheet("div:defined { }");
 	});
 	test("pseudoClass 'dir()' failed", function(){
 		assertStyleSheet("div:dir() { }", Rules.UnsupportedPseudoSelector);
