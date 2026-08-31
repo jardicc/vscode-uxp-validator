@@ -1,9 +1,9 @@
-import {jsonrepair} from "jsonrepair";
 import {ICommonUXP, IFirstSafeAppVersion, IHostApp, ISafeAppVersion, ISettings, TDetectedVersions, THostApp, supportedApps} from "./types";
 import {IV8Item, v8Versions, versionTable} from "./versionTable";
 import {maxSatisfying, compare, rcompare} from "semver";
 import type {compare as TCompare} from "semver";
 import {lte} from "semver";
+import {jsonrepair} from "./jsonrepair";
 
 export class VersionMatcher {
 

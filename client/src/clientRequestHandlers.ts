@@ -9,15 +9,21 @@ export function setClientRequestHandlers() {
 
 export const requestServer = {
 	enableValidator(enabled: boolean) {
-		ui.client.sendRequest(SERVER_REQUESTS.ENABLE_VALIDATOR, enabled);
+		void ui.client.sendRequest(SERVER_REQUESTS.ENABLE_VALIDATOR, enabled).catch(error => {
+			console.error("Unable to update validator state:", error);
+		});
 		console.log(SERVER_REQUESTS.ENABLE_VALIDATOR, enabled);
 	},
 	setVersion(arg: IPickVersionArg) {
-		ui.client.sendRequest(SERVER_REQUESTS.SET_VERSION, arg);
+		void ui.client.sendRequest(SERVER_REQUESTS.SET_VERSION, arg).catch(error => {
+			console.error("Unable to update UXP version:", error);
+		});
 		console.log(SERVER_REQUESTS.ENABLE_VALIDATOR, arg);
 	},
 	restartServer() {
-		ui.client.sendRequest(SERVER_REQUESTS.RESTART_SERVER);
+		void ui.client.sendRequest(SERVER_REQUESTS.RESTART_SERVER).catch(error => {
+			console.error("Unable to restart validator:", error);
+		});
 		console.log(SERVER_REQUESTS.RESTART_SERVER);
 	},
 };
