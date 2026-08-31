@@ -110,6 +110,14 @@ export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument,
 		return;
 	}
 
+	if (node.type === "property" && ["uncaughtException", "unhandledRejection"].includes(node.keyNode.value)) {
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+
+		if (uxpVersion && satisfies(uxpVersion, "<9.4.0")) {
+			addProblem(node, `\`${node.keyNode.value}\` is not supported in UXP version ${uxpVersion}. UXP version should be >=9.4.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		}
+	}
+
 
 	/*
 		enableSWCSupport 7.0
@@ -196,6 +204,26 @@ export function handlePermissions(node: json.ASTNode, textDocument: json.TextDoc
 		enableAddon						ps 24.2.0, id n/a, xd n/a, (uxp 6.2.0)
 		enableUserInfo					uxp 7.3.0 implemented but fixed in 7.4.0
 	*/
+	if (node.type === "property" && node.keyNode.value === "webview" && node.valueNode?.type === "object") {
+		const nodePath = getNodePath(node);
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+
+		if (nodePath.includes("requiredPermissions") && uxpVersion) {
+			const properties = node.valueNode.children ?? [];
+			const hasDomains = properties.some(child => child.type === "property" && child.keyNode.value === "domains");
+			const hasAllow = properties.some(child => child.type === "property" && child.keyNode.value === "allow");
+
+			if (satisfies(uxpVersion, "<9.0.0") && !hasDomains) {
+				addProblem(node, `requiredPermissions.webview.domains is required before UXP 9.0. You target UXP version ${uxpVersion}.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+			}
+			if (satisfies(uxpVersion, "<9.1.0") && !hasAllow) {
+				addProblem(node, `requiredPermissions.webview.allow is required before UXP 9.1. You target UXP version ${uxpVersion}.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+			}
+			if (satisfies(uxpVersion, ">=9.1.0") && hasAllow) {
+				addProblem(node, `requiredPermissions.webview.allow is no longer used since UXP 9.1. You target UXP version ${uxpVersion}.`, json.DiagnosticSeverity.Warning, diagnostic, textDocument);
+			}
+		}
+	}
 
 	if (node.type === "property" && node.keyNode.value === "enableUserInfo" && node.valueNode?.value === true) {
 		// TODO - change this to PS only

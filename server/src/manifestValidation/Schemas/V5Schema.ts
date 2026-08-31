@@ -421,6 +421,16 @@ export const V5Schema: JSONSchema = {
 		"featureFlags": {
 			"type": "object",
 			"properties": {
+				"uncaughtException": {
+					"type": "boolean",
+					"default": true,
+					"markdownDescription": "Captures and reports uncaught JavaScript exceptions in third-party plugins. Opt-in since UXP 9.4.",
+				},
+				"unhandledRejection": {
+					"type": "boolean",
+					"default": true,
+					"markdownDescription": "Captures and reports unhandled promise rejections in third-party plugins. Opt-in since UXP 9.4.",
+				},
 				"enableSWCSupport": {
 					"type": "boolean",
 					"default": true,
@@ -574,9 +584,6 @@ export const V5Schema: JSONSchema = {
 					"unevaluatedProperties": false,
 				},
 				"webview": {
-					"required": [
-						"domains","allow",
-					],
 					"properties": {
 						"domains": {
 							"oneOf": [
@@ -594,7 +601,7 @@ export const V5Schema: JSONSchema = {
 						},
 						"allow": {
 							"const": "yes",
-							"markdownDescription": "Enables webview access to the plugin.",
+							"markdownDescription": "Enables webview access to the plugin. This field is no longer used since UXP 9.1.",
 						},
 						"allowLocalRendering": {
 							"const": "yes",
