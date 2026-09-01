@@ -178,6 +178,12 @@ export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument,
 	}
 	// Enable SWC support overrides CSS Next Support
 	if (node.type === "property" && node.keyNode.value === "CSSNextSupport") {
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+
+		if (uxpVersion && satisfies(uxpVersion, "<8.0.1")) {
+			addProblem(node, `\`CSSNextSupport\` is not supported in UXP version ${uxpVersion}. UXP version should be >=8.0.1`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		}
+
 		node.parent?.children?.find((child) => {
 			if (child.type === "property" && child.keyNode.value === "enableSWCSupport" && child.valueNode?.value === true) {
 				addProblem(node, `\`CSSNextSupport\` is always enabled when \`enableSWCSupport\` is enabled.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
@@ -250,6 +256,20 @@ export function handlePermissions(node: json.ASTNode, textDocument: json.TextDoc
 
 		if(satisfies(psVersion, "<24.2.0")) {
 			addProblem(node, `enableAddon is not supported in UXP version ${psVersion}. UXP version should be >=24.2.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		}
+	}
+	if (node.type === "property" && node.keyNode.value === "domains" && node.valueNode) {
+		const nodePath = getNodePath(node).join(".");
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+		const domains = getNodeValue(node.valueNode);
+
+		if (uxpVersion && satisfies(uxpVersion, ">=7.4.0") && nodePath.includes("requiredPermissions") && (nodePath.includes("network") || nodePath.includes("webview"))) {
+			const domainList = Array.isArray(domains) ? domains : [domains];
+			const invalidDomain = domainList.find(domain => typeof domain === "string" && /^(?:[a-z][a-z\d+.-]*:\/\/)?\*\.[^./:]+(?::\d+)?(?:[/#?]|$)/i.test(domain));
+
+			if (invalidDomain) {
+				addProblem(node, `Top-level domain wildcards such as \`${invalidDomain}\` are not allowed since UXP 7.4. Use a specific domain or a wildcard on a subdomain such as \`https://*.example.com\`.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+			}
 		}
 	}
 	if (node.type === "property" && node.keyNode.value === "allowLocalRendering") {
