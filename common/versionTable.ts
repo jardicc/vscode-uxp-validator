@@ -2,9 +2,18 @@ import {THostApp} from "./types";
 
 export const versionTable:TVersionTable = {
 	PS: {
-		"26.1.0": {uxp: "8.1.0", date: new Date("Nov 2024")}, //
-		"26.0.0": {uxp: "8.0.1", date: new Date("Oct 2024")}, //
-		"25.5.0": {uxp: "7.4.0", date: new Date("Feb 2024")}, //
+		"27.7.0": {uxp: "9.3.0", date: new Date("May 2026")},
+		"27.4.0": {uxp: "9.2.0", date: new Date("Feb 2026")},
+		"26.11.0": {uxp: "9.0.2", date: new Date("Sep 2025")},
+		"26.10.0": {uxp: "9.0.1", date: new Date("Aug 2025")},
+		"26.9.0": {uxp: "8.4.0", date: new Date("Jul 2025")},
+		"26.8.0": {uxp: "8.3.0", date: new Date("Jun 2025")},
+		"26.6.1": {uxp: "8.1.4", date: new Date("Apr 2025")},
+		"26.6.0": {uxp: "8.1.2", date: new Date("Mar 2025")},
+		"26.3.0": {uxp: "8.1.1", date: new Date("Jan 2025")},
+		"26.1.0": {uxp: "8.1.0", date: new Date("Nov 2024")},
+		"26.0.0": {uxp: "8.1.0", date: new Date("Oct 2024")},
+		"25.5.0": {uxp: "7.4.0", date: new Date("Feb 2024")},
 		"25.2.0": {uxp: "7.3.0", date: new Date("Now 2023")}, // check the date
 		"25.0.0": {uxp: "7.2.0", date: new Date("Sep 2023")},
 		"24.6.0": {uxp: "7.1.0", date: new Date("Apr 2023")}, // June 2023 (version 24.6) release
@@ -35,9 +44,17 @@ export const versionTable:TVersionTable = {
 		*/
 	},
 	premierepro: {
+		"26.3.0": {uxp: "9.3.0", date: new Date("Jun 2026")},
+		"26.2.0": {uxp: "9.2.1", date: new Date("Apr 2026")},
+		"26.0.2": {uxp: "8.1.0", date: new Date("Mar 2026")},
 		"25.2.0": {uxp: "8.1.0", date: new Date("Dec 2024")},
 	},
 	ID: {
+		"21.4.0": {uxp: "9.3.0", date: new Date("May 2026")},
+		"21.3.0": {uxp: "9.2.1", date: new Date("Mar 2026")},
+		"21.0.0": {uxp: "9.0.3", date: new Date("Oct 2025")},
+		"20.4.0": {uxp: "8.1.6", date: new Date("Jul 2025")},
+		"20.2.1": {uxp: "8.0.1", date: new Date("Feb 2025")},
 		"20.0.0": {uxp: "8.0.1", date: new Date("Oct 2024")},
 		"19.0.0": {uxp: "7.3.1", date: new Date("Sep 2023")},
 		"18.5.0": {uxp: "7.1.0", date: new Date("Jun 2023")},

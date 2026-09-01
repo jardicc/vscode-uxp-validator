@@ -3265,12 +3265,12 @@ export const cssData: UXPCSSDataV1 = {
 				{
 					name: "scaleX()",
 					description: "Specifies a scale operation using the [sx,1] scaling vector, where sx is given as the parameter.",
-					browsers: ["UXP8.0"],
+					browsers: ["UXP8.0.1"],
 				},
 				{
 					name: "scaleY()",
 					description: "Specifies a scale operation using the [sy,1] scaling vector, where sy is given as the parameter.",
-					browsers: ["UXP8.0"],
+					browsers: ["UXP8.0.1"],
 				},
 				{
 					name: "translate()",
@@ -3298,7 +3298,14 @@ export const cssData: UXPCSSDataV1 = {
 		},
 		{
 			name: "transform-origin",
-			browsers: ["UXP8.0"],
+			browsers: ["UXP8.0.1"],
+			values: [
+				{name: "left"},
+				{name: "center"},
+				{name: "right"},
+				{name: "top"},
+				{name: "bottom"},
+			],
 			syntax: "[ <length-percentage> | left | center | right | top | bottom ] | [ [ <length-percentage> | left | center | right ] && [ <length-percentage> | top | center | bottom ] ] <length>?",
 			relevance: 74,
 			references: [
@@ -3318,7 +3325,7 @@ export const cssData: UXPCSSDataV1 = {
 			name: "translate",
 			syntax: "none | <length-percentage> [ <length-percentage> <length>? ]?",
 			relevance: 50,
-			browsers: ["UXP8.0"],
+			browsers: ["UXP8.0.1"],
 			references: [
 				{
 					"name": "MDN Reference",
@@ -4032,11 +4039,11 @@ export const cssData: UXPCSSDataV1 = {
 		},
 		{
 			name: "scaleX",
-			browsers: ["UXP8.0"],
+			browsers: ["UXP8.0.1"],
 		},
 		{
 			name: "scaleY",
-			browsers: ["UXP8.0"],
+			browsers: ["UXP8.0.1"],
 		},
 		{
 			name: "translate",

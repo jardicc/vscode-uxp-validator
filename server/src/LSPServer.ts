@@ -16,7 +16,7 @@ export class LSPServer{
 	public static connection: vs.Connection;
 	private static jsonDocuments = getLanguageModelCache<JSONDocument>(10, 60, document => LSPServer.validator.jsonLs.parseJSONDocument(document));
 
-	public static async startServer() {
+	public static startServer(): void {
 		LSPServer.connection = vs.createConnection();
 		const connection = LSPServer.connection;
 		connection.console.info(`UXP Validator LSP server running in node ${process.version}`);
@@ -28,7 +28,7 @@ export class LSPServer{
 		/**
 		 * Once server is ready
 		 */
-		connection.onInitialized(LSPServer.onInitialized);
+		connection.onInitialized(() => LSPServer.runSafely("Server initialization failed", LSPServer.onInitialized));
 
 		/**
 		 * Creates tool tip on mouse hover over the code
@@ -85,12 +85,26 @@ export class LSPServer{
 	}
 
 	/**
-	 * Only re-validate document if there is no validation request for at least 200ms
-	 * This is to save CPU
+	 * Only re-validate document if there is no validation request for at least 200ms.
+	 * This saves CPU on rapid typing and — together with the document-version guard inside
+	 * `Validator.update()` — prevents stale diagnostics from a slower in-flight validation
+	 * overwriting the result of a newer one in the Problems panel.
 	 */
 	private static onDidChangeContentDebounced = debounce((event) => {
-		LSPServer.validator.update(event.document);
-	}, 0);
+		void LSPServer.runSafely(
+			`Validation failed for '${event.document.uri}'`,
+			() => LSPServer.validator.update(event.document),
+		);
+	}, 200);
+
+	private static async runSafely(context: string, operation: () => Promise<void>): Promise<void> {
+		try {
+			await operation();
+		} catch (error) {
+			const details = error instanceof Error ? error.stack ?? error.message : String(error);
+			LSPServer.connection.console.error(`${context}: ${details}`);
+		}
+	}
 
 	private static async onInitialized() {
 		console.log("Server initialized start");
@@ -103,11 +117,26 @@ export class LSPServer{
 		/**
 		 * Validate newly opened document by default
 		 */
-		LSPServer.documents.onDidOpen(async (event) => {
-			await LSPServer.validator.update(event.document);
+		LSPServer.documents.onDidOpen((event) => {
+			return LSPServer.runSafely(
+				`Validation failed for '${event.document.uri}'`,
+				() => LSPServer.validator.update(event.document),
+			);
 		});
 
 		LSPServer.documents.onDidChangeContent(LSPServer.onDidChangeContentDebounced);
+
+		/**
+		 * Clear diagnostics when a document is closed. Otherwise the Problems panel
+		 * keeps showing entries from the last validation forever (until the server dies),
+		 * which looks like a stale race-condition result.
+		 */
+		LSPServer.documents.onDidClose((event) => {
+			return LSPServer.runSafely(
+				`Unable to clear diagnostics for '${event.document.uri}'`,
+				() => LSPServer.connection.sendDiagnostics({uri: event.document.uri, diagnostics: []}),
+			);
+		});
 
 		// Send messages to client once server is ready
 		LSPServer.updateClientUI();

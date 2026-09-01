@@ -9,3 +9,4 @@
 
 !server/out/**/*.js
 !server/out/**/*.txt
+!plans
