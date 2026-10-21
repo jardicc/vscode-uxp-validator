@@ -14,6 +14,7 @@ import {LSPServer} from "./LSPServer";
 import {requestClient} from "./serverRequestHandlers";
 import {unsupportedSchema} from "./manifestValidation/Schemas/unsupportedSchema";
 import {V6Schema} from "./manifestValidation/Schemas/V6Schema";
+import {jsonrepair} from "../../common/jsonrepair";
 
 export class Validator {
 
@@ -63,7 +64,8 @@ export class Validator {
 	 */
 	private assignManifestVersionFromContent(fileContent: string):void {
 		try {
-			const obj = JSON.parse(fileContent);
+			const repairedJSON = jsonrepair(fileContent);
+			const obj = JSON.parse(repairedJSON);
 			switch (obj?.manifestVersion) {
 				case 4:
 					this.manifestVersion = 4;
@@ -166,8 +168,13 @@ export class Validator {
 	/**
 	 * Will validate all documents
 	 */
-	private validateAllDocs() {
-		LSPServer.documents.all().forEach(this.update.bind(this));
+	private async validateAllDocs(): Promise<void> {
+		const results = await Promise.allSettled(LSPServer.documents.all().map(document => this.update(document)));
+		for (const result of results) {
+			if (result.status === "rejected") {
+				LSPServer.connection.console.error(`Document validation failed: ${String(result.reason)}`);
+			}
+		}
 	}
 
 	/**
@@ -178,7 +185,7 @@ export class Validator {
 		this.inlineHintExperiment(); // ! FIXME - inLay hints shows error without this one
 		await LSPServer.fetchSettings();
 		await this.updateManifestFile();
-		this.validateAllDocs();
+		await this.validateAllDocs();
 		console.log("activate");
 	}
 
@@ -190,7 +197,13 @@ export class Validator {
 
 		const workspace = folders[0];
 		const cwdPath = fileURLToPath(workspace.uri);
-		const found = await globby("**/manifest.json", {cwd: cwdPath, gitignore: true, ignore: ["**/node_modules/**"], absolute: true});
+		const found = await globby("**/manifest.json", {
+			cwd: cwdPath,
+			gitignore: true,
+			ignore: ["**/node_modules/**"],
+			absolute: true,
+			suppressErrors: true,
+		});
 		return found;
 
 	}
@@ -201,7 +214,13 @@ export class Validator {
 		if (files.length === 0) {
 			return;
 		}
-		const fileContent = await readFile(files[0], "utf-8");
+		let fileContent: string;
+		try {
+			fileContent = await readFile(files[0], "utf-8");
+		} catch (error) {
+			LSPServer.connection.console.warn(`Unable to read manifest file '${files[0]}': ${String(error)}`);
+			return;
+		}
 
 		await this.initVersionMatcher(fileContent);
 		//const firstApp = this.versionMatcher.App;
@@ -254,11 +273,24 @@ export class Validator {
 		);
 		await Promise.allSettled(promises);
 		// clean inlay hints
-		//LSPServer.connection.languages.inlayHint.on(() => []);
+		console.log("clean inlay hints");
 		this.inlineHintExperiment();
 	}
 
 	private inlineHintExperiment(document?: json.TextDocument, jsonDocument?: json.JSONDocument) {
+
+		LSPServer.connection.languages.inlayHint.resolve((hint) => {
+			if (typeof hint.label === "string") {
+				hint.label = [InlayHintLabelPart.create(hint.label)];
+			}
+			for (let i = 0; i < hint.label.length; i++) {
+				let value = hint.label[i].value;
+				value = value.replace(" = ", "").split("|").map(str => str.trim()).join("\n");
+				hint.label[i].tooltip = value;
+			}
+			return hint;
+		});
+
 		LSPServer.connection.languages.inlayHint.on((arg) => {
 			if (!this.enabled) {
 				return [];
@@ -277,12 +309,6 @@ export class Validator {
 			const res = makeInlayHints(document, jsonDocument as JSONDocument, this._versionMatcher);
 			return res;
 		});
-
-		LSPServer.connection.languages.inlayHint.resolve((hint) => {
-			(hint.label as InlayHintLabelPart[])[0].tooltip = "tooltip";
-			hint.textEdits = [TextEdit.insert(Position.create(1, 1), "number")];
-			return hint;
-		});
 	}
 
 	/**
@@ -294,8 +320,19 @@ export class Validator {
 		if (!this.enabled) {
 			return;
 		}
-		console.log("update");
-		console.time("update");
+		// Snapshot the document version we are validating. Because this function is async
+		// (and may be invoked concurrently by debounced change events, onDidOpen, manifest
+		// reloads, etc.), a slower in-flight call could otherwise finish after a newer one
+		// and overwrite the Problems panel with stale diagnostics. Before sending results
+		// we re-check that no newer version has been opened/changed in the meantime.
+		const validatedVersion = document.version;
+		const isStale = (): boolean => {
+			const latest = LSPServer.documents.get(document.uri);
+			// If the document was closed (no longer tracked) we also drop the result; the
+			// onDidClose handler is responsible for clearing diagnostics.
+			return !latest || latest.version !== validatedVersion;
+		};
+
 		switch (document.languageId) {
 			case "css":
 			case "less":
@@ -304,6 +341,9 @@ export class Validator {
 				const styleSheet = ls.parseStylesheet(document);
 				ls.configure({validate: true});
 				const diagnostics = ls.doValidation(document, styleSheet);
+				if (isStale()) {
+					return;
+				}
 				LSPServer.connection.sendDiagnostics({uri: document.uri.toString(), diagnostics});
 				break;
 			}
@@ -326,6 +366,13 @@ export class Validator {
 
 				const mergeDiagnostics = [...diagnostics, ...quirkDiagnostics];
 
+				// Drop the result if a newer change came in while we were awaiting above
+				// (schema fetch, async JSON validation). Sending it would race with the
+				// newer pending validation and may leave already-fixed errors in the panel.
+				if (isStale()) {
+					return;
+				}
+
 				LSPServer.connection.sendDiagnostics({uri: document.uri.toString(), diagnostics: mergeDiagnostics});
 
 				this.inlineHintExperiment(document, jsonDocument);
@@ -333,6 +380,5 @@ export class Validator {
 				break;
 			}
 		}
-		console.timeEnd("update");
 	}
 }

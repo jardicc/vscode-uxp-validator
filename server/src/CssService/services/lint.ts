@@ -12,7 +12,7 @@ import {NodeType as NType} from "../../CssServiceOriginal/parser/cssNodes";
 import { LintConfigurationSettings, Rule, Rules, Settings } from "./lintRules";
 import { Element } from "../../CssServiceOriginal/services/lintUtil";
 import {UXPCustomData} from "../UXPCustomData";
-import {cssData} from "../data/uxpCustomData";
+import {allKnownFunctionNames, cssData} from "../data/uxpCustomData";
 import {Validator} from "../../Validator";
 import {LSPServer} from "../../LSPServer";
 
@@ -530,13 +530,33 @@ export class LintVisitor implements nodes.IVisitor {
 	private visitFunction(node: nodes.Function): boolean {
 		const fnName = node.getName();//.toLowerCase();
 
-		// Skip function in SCSS and Less
-		// ! TODO - check how to handle built-in functions
-		if (this.isLess || this.isScss) {
+		// Have a list of all possible functions in modern browsers (sadly might need to be updated more often)
+		// So uxp supported function will be checked same as everything else
+		// banned functions will always report an error
+		// everything else will just pass
+
+		const foundFunctionRule = this.uxpCustomData.getValidFunctionName(fnName);
+
+		// You can't have custom functions in classic CSS (at least for now)
+		// So everything not on our list will be reported as an error
+		if (!this.isLess && !this.isScss) {
+			if(!foundFunctionRule) {
+				this.addEntry(
+					node,
+					Rules.UnsupportedFunction,
+					l10n.t("Function: '{0}' is not supported in {1}", fnName, this.uxpCustomData.versionForDisplay),
+				);
+			}
 			return true;
 		}
 
-		if(!this.uxpCustomData.getValidFunctionName(fnName)) {
+		// In Less and SCSS we have custom functions
+		// So we need to check if it's a custom function
+		// We do that by checking if it's in the list of known functions
+		// If it is built-in function but not in our list, we report an error
+		// If it is built-in function and in our list, we validate as everything else
+		// If it's a custom function, we don't report an error
+		if (!foundFunctionRule && allKnownFunctionNames.includes(fnName)) {
 			this.addEntry(
 				node,
 				Rules.UnsupportedFunction,

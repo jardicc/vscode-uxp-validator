@@ -1,6 +1,6 @@
 import {Connection} from "vscode-languageserver";
 import {LSPServer} from "./LSPServer";
-import {CLIENT_REQUESTS, SERVER_REQUESTS} from "../../common/constants";
+import { CLIENT_REQUESTS, SERVER_REQUESTS } from "../../common/constants";
 
 /**
  * Listen and handle client requests
@@ -18,7 +18,9 @@ export const requestClient = {
 	 * @param enabled
 	 */
 	enableValidator(enabled: boolean) {
-		LSPServer.connection.sendRequest(CLIENT_REQUESTS.ENABLE_VALIDATOR, enabled);
+		void LSPServer.connection.sendRequest(CLIENT_REQUESTS.ENABLE_VALIDATOR, enabled).catch(error => {
+			LSPServer.connection.console.error(`Unable to update validator state in the client: ${String(error)}`);
+		});
 		console.log(CLIENT_REQUESTS.ENABLE_VALIDATOR, enabled);
 
 	},
@@ -27,7 +29,9 @@ export const requestClient = {
 	 * @param arg
 	 */
 	setVersion(arg: string) {
-		LSPServer.connection.sendRequest(CLIENT_REQUESTS.SET_VERSION, arg);
+		void LSPServer.connection.sendRequest(CLIENT_REQUESTS.SET_VERSION, arg).catch(error => {
+			LSPServer.connection.console.error(`Unable to update UXP version in the client: ${String(error)}`);
+		});
 		console.log(CLIENT_REQUESTS.SET_VERSION, arg);
 	},
 };

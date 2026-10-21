@@ -2,7 +2,18 @@ import {THostApp} from "./types";
 
 export const versionTable:TVersionTable = {
 	PS: {
-		"25.5.0": {uxp: "7.4.0", date: new Date("Feb 2024")}, // February 2024 (version 25.5) release
+		"27.7.0": {uxp: "9.3.0", date: new Date("May 2026")},
+		"27.4.0": {uxp: "9.2.0", date: new Date("Feb 2026")},
+		"26.11.0": {uxp: "9.0.2", date: new Date("Sep 2025")},
+		"26.10.0": {uxp: "9.0.1", date: new Date("Aug 2025")},
+		"26.9.0": {uxp: "8.4.0", date: new Date("Jul 2025")},
+		"26.8.0": {uxp: "8.3.0", date: new Date("Jun 2025")},
+		"26.6.1": {uxp: "8.1.4", date: new Date("Apr 2025")},
+		"26.6.0": {uxp: "8.1.2", date: new Date("Mar 2025")},
+		"26.3.0": {uxp: "8.1.1", date: new Date("Jan 2025")},
+		"26.1.0": {uxp: "8.1.0", date: new Date("Nov 2024")},
+		"26.0.0": {uxp: "8.1.0", date: new Date("Oct 2024")},
+		"25.5.0": {uxp: "7.4.0", date: new Date("Feb 2024")},
 		"25.2.0": {uxp: "7.3.0", date: new Date("Now 2023")}, // check the date
 		"25.0.0": {uxp: "7.2.0", date: new Date("Sep 2023")},
 		"24.6.0": {uxp: "7.1.0", date: new Date("Apr 2023")}, // June 2023 (version 24.6) release
@@ -20,7 +31,6 @@ export const versionTable:TVersionTable = {
 		"22.4.0": {uxp: "5.0.1", date: new Date("May 2021")}, // Version 22.4 was released in May 2021.
 		"22.2.0": {uxp: "4.3.2", date: new Date("Feb 2021")}, // Version 22.2 was released in Feb 2021.
 		"21.1.0": {uxp: "3.4.2", date: new Date("Feb 2020")}, // Version 21.1 was released in Feb 2020.
-
 		/*
 			Version 24.7 was released on July 27, 2023.
 			May 2023 (version 24.5) release
@@ -33,7 +43,19 @@ export const versionTable:TVersionTable = {
 			Version 22.3.1 was released in April 2021.
 		*/
 	},
+	premierepro: {
+		"26.3.0": {uxp: "9.3.0", date: new Date("Jun 2026")},
+		"26.2.0": {uxp: "9.2.1", date: new Date("Apr 2026")},
+		"26.0.2": {uxp: "8.1.0", date: new Date("Mar 2026")},
+		"25.2.0": {uxp: "8.1.0", date: new Date("Dec 2024")},
+	},
 	ID: {
+		"21.4.0": {uxp: "9.3.0", date: new Date("May 2026")},
+		"21.3.0": {uxp: "9.2.1", date: new Date("Mar 2026")},
+		"21.0.0": {uxp: "9.0.3", date: new Date("Oct 2025")},
+		"20.4.0": {uxp: "8.1.6", date: new Date("Jul 2025")},
+		"20.2.1": {uxp: "8.0.1", date: new Date("Feb 2025")},
+		"20.0.0": {uxp: "8.0.1", date: new Date("Oct 2024")},
 		"19.0.0": {uxp: "7.3.1", date: new Date("Sep 2023")},
 		"18.5.0": {uxp: "7.1.0", date: new Date("Jun 2023")},
 	},
@@ -55,16 +77,30 @@ export const versionTable:TVersionTable = {
 		"29.0.32": {uxp: "3.4.4", date: new Date("May 2020")},
 		"28.0.0": {uxp: "3.3.9", date: new Date("Mar 2020")},
 		"21.0.12": {uxp: "3.0.0", date: new Date("Jul 2019")},
-
 	},
 
 };
 
+// See https://compat-table.github.io/compat-table/es2016plus/ for overview of ES features
+
 export const v8Versions:IV8Versions = {
+	"8.0.1": {
+		v8: "11.8.172.13",
+		es: "2024",
+		extraFeatures: [
+			"ES2025 - Iterator Helpers", // works
+		],
+		missingFeatures: [
+			"ES2025 - Duplicate named capturing groups",
+			"ES2025 - Set methods",
+			"ES2025 - RegExp Pattern Modifiers",
+			// not about Unicode and Regexp
+		],
+	}, // Oct 27 2021
 	"6.0.0": {
 		v8: "9.4.146.24",
 		es: "2022",
-		notes: [
+		missingFeatures: [
 			"ES2018 - RegExp Unicode 15 Property Escapes",
 			"ES2018 - RegExp Unicode 15.1 Property Escapes",
 			"ES2022 - RegExp Match Indices (`hasIndices` / `d` flag) > shows up in flags",
@@ -74,7 +110,7 @@ export const v8Versions:IV8Versions = {
 	"5.1.0": {
 		v8: "8.9.255.20",
 		es: "2021",
-		notes: [
+		missingFeatures: [
 			"ES2018 - RegExp Unicode 14 Property Escapes",
 			"ES2018 - RegExp Unicode 15 Property Escapes",
 			"ES2018 - RegExp Unicode 15.1 Property Escapes",
@@ -85,7 +121,7 @@ export const v8Versions:IV8Versions = {
 	"5.0.0": {
 		v8: "8.8.278.14",
 		es: "2021",
-		notes: [
+		missingFeatures: [
 			"ES2018 - RegExp Unicode 14 Property Escapes",
 			"ES2018 - RegExp Unicode 15 Property Escapes",
 			"ES2018 - RegExp Unicode 15.1 Property Escapes",
@@ -96,7 +132,7 @@ export const v8Versions:IV8Versions = {
 	"4.3.0": {
 		v8: "8.3.110.13",
 		es: "2020",
-		notes: [
+		missingFeatures: [
 			"ES2018 - RegExp Unicode 14 Property Escapes",
 			"ES2018 - RegExp Unicode 15 Property Escapes",
 			"ES2018 - RegExp Unicode 15.1 Property Escapes",
@@ -124,7 +160,8 @@ export interface IV8Item{
 	uxp?: string
 	es: string
 	v8: string
-	notes?: string[]
+	missingFeatures?: string[]
+	extraFeatures?: string[]
 }
 
 /*

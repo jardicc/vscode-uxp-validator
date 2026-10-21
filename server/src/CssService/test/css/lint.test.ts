@@ -88,6 +88,10 @@ suite("CSS - Lint", () => {
 	test("properties with version switch", function () {
 		assertRuleSet("selector { border-collapse: collapse; }");
 		assertRuleSet("selector { border-collapse: collapse; }", Rules.UnknownProperty, "5.0.0");
+		assertRuleSet("selector { transform-origin: center; }", Rules.UnknownProperty, "8.0.0");
+		assertRuleSet("selector { transform-origin: center; }", [], "8.0.1");
+		assertRuleSet("selector { translate: 10px; }", Rules.UnknownProperty, "8.0.0");
+		assertRuleSet("selector { translate: 10px; }", [], "8.0.1");
 	});
 
 	// ENUM VALUES
@@ -228,7 +232,7 @@ suite("CSS - Lint", () => {
 		assertStyleSheet("div:default { }", Rules.UnsupportedPseudoSelector);
 	});
 	test("pseudoClass 'defined' failed", function(){
-		assertStyleSheet("div:defined { }", Rules.UnsupportedPseudoSelector);
+		assertStyleSheet("div:defined { }");
 	});
 	test("pseudoClass 'dir()' failed", function(){
 		assertStyleSheet("div:dir() { }", Rules.UnsupportedPseudoSelector);

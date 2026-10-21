@@ -3,6 +3,7 @@ import {IV8Item, v8Versions, versionTable} from "./versionTable";
 import {maxSatisfying, compare, rcompare} from "semver";
 import type {compare as TCompare} from "semver";
 import {lte} from "semver";
+import {jsonrepair} from "./jsonrepair";
 
 export class VersionMatcher {
 
@@ -22,6 +23,8 @@ export class VersionMatcher {
 			return {...this.ID, app: "ID"};
 		} else if (this.XD) {
 			return {...this.XD, app: "XD"};
+		} else if (this.Premiere) {
+			return {...this.Premiere, app: "premierepro"};
 		} else {
 			return null;
 		}
@@ -37,6 +40,10 @@ export class VersionMatcher {
 
 	public get XD(): ISafeAppVersion | null {
 		return this.getSafeKnownVersion("XD");
+	}
+
+	public get Premiere(): ISafeAppVersion | null {
+		return this.getSafeKnownVersion("premierepro");
 	}
 
 	private get detectedApps(): THostApp[] {
@@ -60,7 +67,7 @@ export class VersionMatcher {
 	 * Returns the latest(lowest common) version of UXP that is supported by all detected apps
 	 */
 	public get commonUXP(): ICommonUXP | null {
-		const allExisting:ISafeAppVersion[] = [this.PS, this.ID, this.XD].filter(item => !!item) as ISafeAppVersion[];
+		const allExisting:ISafeAppVersion[] = [this.PS, this.ID, this.XD, this.Premiere].filter(item => !!item) as ISafeAppVersion[];
 		if (!allExisting.length) {
 			return null;
 		}
@@ -160,7 +167,8 @@ class _VersionMatcherFromFile extends VersionMatcher {
 				this._fileLoadOK = true;
 				return;
 			}
-			const manifest = JSON.parse(content);
+			const repairedJSON = jsonrepair(content);
+			const manifest = JSON.parse(repairedJSON);
 
 			const host: IHostApp[] | IHostApp = manifest?.host;
 
@@ -187,6 +195,7 @@ class _VersionMatcherFromFile extends VersionMatcher {
 				ID: getVersion("ID"),
 				PS: getVersion("PS"),
 				XD: getVersion("XD"),
+				premierepro: getVersion("premierepro"),
 			};
 
 			super(detectedVersions, settings);

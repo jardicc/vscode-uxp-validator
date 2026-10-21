@@ -103,6 +103,22 @@ export function handlePSApiVersion(node: json.ASTNode, textDocument: json.TextDo
 }
 
 export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument, diagnostic: json.Diagnostic[]): void {
+
+	// If we are not directly in the featureFlags object, return (nested featureFlags are not supported)
+	const nodePath = getNodePath(node);
+	if (!nodePath.includes("featureFlags")) {
+		return;
+	}
+
+	if (node.type === "property" && ["uncaughtException", "unhandledRejection"].includes(node.keyNode.value)) {
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+
+		if (uxpVersion && satisfies(uxpVersion, "<9.4.0")) {
+			addProblem(node, `\`${node.keyNode.value}\` is not supported in UXP version ${uxpVersion}. UXP version should be >=9.4.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		}
+	}
+
+
 	/*
 		enableSWCSupport 7.0
 	*/
@@ -126,6 +142,7 @@ export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument,
 			addProblem(node, `enableSWCSupport is not supported in UXP version ${uxpVersion}. UXP version should be >=7.0.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
 		}
 	}
+	// Enable alerts
 	if (node.type === "property" && node.keyNode.value === "enableAlerts" && node.valueNode?.value === true) {
 		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
 		const PSversion = LSPServer.validator.versionMatcher?.detectedVersions?.PS;
@@ -147,6 +164,37 @@ export function handleFlags(node: json.ASTNode, textDocument: json.TextDocument,
 			addProblem(node, `enableAlerts is not supported in UXP version ${uxpVersion}. UXP version should be >=7.0.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
 		}
 	}
+	// Enable fill as custom attribute
+	if (node.type === "property" && node.keyNode.value === "enableFillAsCustomAttribute" && node.valueNode?.value === true) {
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+
+		if (!uxpVersion) {
+			return;
+		}
+
+		if (satisfies(uxpVersion, ">=8.1.0")) {
+			addProblem(node, `You don't need this. \`enableFillAsCustomAttribute\` is turned on by default since UXP version 8.1.0. You target minimal UXP version ${uxpVersion}.`, json.DiagnosticSeverity.Warning, diagnostic, textDocument);
+		}
+	}
+	// Enable SWC support overrides CSS Next Support
+	if (node.type === "property" && node.keyNode.value === "CSSNextSupport") {
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+
+		if (uxpVersion && satisfies(uxpVersion, "<8.0.1")) {
+			addProblem(node, `\`CSSNextSupport\` is not supported in UXP version ${uxpVersion}. UXP version should be >=8.0.1`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		}
+
+		node.parent?.children?.find((child) => {
+			if (child.type === "property" && child.keyNode.value === "enableSWCSupport" && child.valueNode?.value === true) {
+				addProblem(node, `\`CSSNextSupport\` is always enabled when \`enableSWCSupport\` is enabled.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+
+				// CSSNextSupport cannot be an array if enableSWCSupport is enabled
+				if (node.valueNode?.type === "array") {
+					addProblem(node, `\`CSSNextSupport\` cannot be an array and must be set to true or omitted when \`enableSWCSupport\` is enabled.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+				}
+			}
+		});
+	}
 }
 
 export function handlePermissions(node: json.ASTNode, textDocument: json.TextDocument, diagnostic: json.Diagnostic[]): void {
@@ -162,6 +210,26 @@ export function handlePermissions(node: json.ASTNode, textDocument: json.TextDoc
 		enableAddon						ps 24.2.0, id n/a, xd n/a, (uxp 6.2.0)
 		enableUserInfo					uxp 7.3.0 implemented but fixed in 7.4.0
 	*/
+	if (node.type === "property" && node.keyNode.value === "webview" && node.valueNode?.type === "object") {
+		const nodePath = getNodePath(node);
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+
+		if (nodePath.includes("requiredPermissions") && uxpVersion) {
+			const properties = node.valueNode.children ?? [];
+			const hasDomains = properties.some(child => child.type === "property" && child.keyNode.value === "domains");
+			const hasAllow = properties.some(child => child.type === "property" && child.keyNode.value === "allow");
+
+			if (satisfies(uxpVersion, "<9.0.0") && !hasDomains) {
+				addProblem(node, `requiredPermissions.webview.domains is required before UXP 9.0. You target UXP version ${uxpVersion}.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+			}
+			if (satisfies(uxpVersion, "<9.1.0") && !hasAllow) {
+				addProblem(node, `requiredPermissions.webview.allow is required before UXP 9.1. You target UXP version ${uxpVersion}.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+			}
+			if (satisfies(uxpVersion, ">=9.1.0") && hasAllow) {
+				addProblem(node, `requiredPermissions.webview.allow is no longer used since UXP 9.1. You target UXP version ${uxpVersion}.`, json.DiagnosticSeverity.Warning, diagnostic, textDocument);
+			}
+		}
+	}
 
 	if (node.type === "property" && node.keyNode.value === "enableUserInfo" && node.valueNode?.value === true) {
 		// TODO - change this to PS only
@@ -190,7 +258,42 @@ export function handlePermissions(node: json.ASTNode, textDocument: json.TextDoc
 			addProblem(node, `enableAddon is not supported in UXP version ${psVersion}. UXP version should be >=24.2.0`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
 		}
 	}
+	if (node.type === "property" && node.keyNode.value === "domains" && node.valueNode) {
+		const nodePath = getNodePath(node).join(".");
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+		const domains = getNodeValue(node.valueNode);
 
+		if (uxpVersion && satisfies(uxpVersion, ">=7.4.0") && nodePath.includes("requiredPermissions") && (nodePath.includes("network") || nodePath.includes("webview"))) {
+			const domainList = Array.isArray(domains) ? domains : [domains];
+			const invalidDomain = domainList.find(domain => typeof domain === "string" && /^(?:[a-z][a-z\d+.-]*:\/\/)?\*\.[^./:]+(?::\d+)?(?:[/#?]|$)/i.test(domain));
+
+			if (invalidDomain) {
+				addProblem(node, `Top-level domain wildcards such as \`${invalidDomain}\` are not allowed since UXP 7.4. Use a specific domain or a wildcard on a subdomain such as \`https://*.example.com\`.`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+			}
+		}
+	}
+	if (node.type === "property" && node.keyNode.value === "allowLocalRendering") {
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+
+		if (!uxpVersion) {
+			return;
+		}
+
+		if (satisfies(uxpVersion, "<8.0.1")) {
+			addProblem(node, `allowLocalRendering is not supported in UXP version ${uxpVersion}. UXP version should be >=8.0.1`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		}
+	}
+	if (node.type === "property" && node.keyNode.value === "enableMessageBridge" && node.valueNode?.value === "localOnly") {
+		const uxpVersion = LSPServer.validator.versionMatcher?.commonUXP?.uxp;
+
+		if (!uxpVersion) {
+			return;
+		}
+
+		if (satisfies(uxpVersion, "<8.0.1")) {
+			addProblem(node, `"localOnly" value is not supported in UXP version ${uxpVersion}. UXP version should be >=8.0.1`, json.DiagnosticSeverity.Error, diagnostic, textDocument);
+		}
+	}
 }
 
 export function handleManifestVersion(node: json.ASTNode, textDocument: json.TextDocument, diagnostic: json.Diagnostic[]): void {

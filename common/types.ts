@@ -2,6 +2,7 @@ export const supportedApps = [
 	"XD",
 	"PS",
 	"ID",
+	"premierepro",
 ] as const;
 
 export type THostApp = typeof supportedApps[number];

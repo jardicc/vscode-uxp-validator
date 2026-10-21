@@ -1,5 +1,5 @@
-import {name} from "../package.json";
-//const name = "uxpvalidator";
+//import {name} from "../package.json";
+const name = "uxpvalidator";
 
 export const EXTENSION_ID = name;
 
