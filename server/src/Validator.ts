@@ -1,10 +1,8 @@
 import * as style from "./CssServiceOriginal/cssLanguageService";
-import {InlayHintLabelPart, Position, TextEdit} from "vscode-languageserver/node";
 import * as json from "./manifestValidation/JsonService/jsonLanguageService";
 import {V5Schema} from "./manifestValidation/Schemas/V5Schema";
 import {v4Schema} from "./manifestValidation/Schemas/V4Schema";
 import {VersionMatcherFromFile} from "../../common/VersionMatcher";
-import {makeInlayHints} from "./manifestValidation/inlayHint";
 import {JSONDocument} from "./manifestValidation/JsonService/parser/jsonParser";
 import {getQuirks} from "./manifestValidation/jsonQuirksDetector";
 import {readFile} from "fs/promises";
@@ -182,10 +180,10 @@ export class Validator {
 	 */
 	public async start(): Promise<void> {
 		this._enabled = true;
-		this.inlineHintExperiment(); // ! FIXME - inLay hints shows error without this one
 		await LSPServer.fetchSettings();
 		await this.updateManifestFile();
 		await this.validateAllDocs();
+		this.refreshInlayHints();
 		console.log("activate");
 	}
 
@@ -274,40 +272,12 @@ export class Validator {
 		await Promise.allSettled(promises);
 		// clean inlay hints
 		console.log("clean inlay hints");
-		this.inlineHintExperiment();
+		this.refreshInlayHints();
 	}
 
-	private inlineHintExperiment(document?: json.TextDocument, jsonDocument?: json.JSONDocument) {
-
-		LSPServer.connection.languages.inlayHint.resolve((hint) => {
-			if (typeof hint.label === "string") {
-				hint.label = [InlayHintLabelPart.create(hint.label)];
-			}
-			for (let i = 0; i < hint.label.length; i++) {
-				let value = hint.label[i].value;
-				value = value.replace(" = ", "").split("|").map(str => str.trim()).join("\n");
-				hint.label[i].tooltip = value;
-			}
-			return hint;
-		});
-
-		LSPServer.connection.languages.inlayHint.on((arg) => {
-			if (!this.enabled) {
-				return [];
-			}
-			// removes all inlay hints if no argument is passed
-			if (!document || !jsonDocument) {
-				return [];
-			}
-
-			if (!arg.textDocument.uri.endsWith("manifest.json")) {
-				return [];
-			}
-			if (!this._versionMatcher) {
-				return [];
-			}
-			const res = makeInlayHints(document, jsonDocument as JSONDocument, this._versionMatcher);
-			return res;
+	private refreshInlayHints(): void {
+		void LSPServer.connection.languages.inlayHint.refresh().catch(() => {
+			// Client may not support workspace/inlayHint/refresh; safe to ignore
 		});
 	}
 
@@ -375,7 +345,7 @@ export class Validator {
 
 				LSPServer.connection.sendDiagnostics({uri: document.uri.toString(), diagnostics: mergeDiagnostics});
 
-				this.inlineHintExperiment(document, jsonDocument);
+				this.refreshInlayHints();
 
 				break;
 			}

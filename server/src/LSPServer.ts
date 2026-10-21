@@ -5,6 +5,8 @@ import {Validator} from "./Validator";
 import {requestClient, setServerRequestHandlers} from "./serverRequestHandlers";
 import {debounce} from "lodash";
 import {JSONDocument} from "./manifestValidation/JsonService/jsonLanguageService";
+import {JSONDocument as ASTJSONDocument} from "./manifestValidation/JsonService/parser/jsonParser";
+import {makeInlayHints} from "./manifestValidation/inlayHint";
 import {IPickVersionArg, ISettings} from "../../common/types";
 import {EXTENSION_ID, SERVER_REQUESTS} from "../../common/constants";
 
@@ -48,6 +50,12 @@ export class LSPServer{
 			return item;
 		});
 
+		connection.languages.inlayHint.on(LSPServer.onInlayHint);
+		connection.languages.inlayHint.resolve(LSPServer.onInlayHintResolve);
+
+		// Set how to handle requests from client
+		setServerRequestHandlers(connection);
+
 		LSPServer.documents = new vs.TextDocuments(TextDocument);
 		LSPServer.documents.listen(connection);
 		connection.listen(); // After all is prepared
@@ -64,6 +72,9 @@ export class LSPServer{
 
 	public static async onEnableValidator(enable: boolean) {
 		console.log("Server got: ", SERVER_REQUESTS.ENABLE_VALIDATOR, enable);
+		if (!LSPServer.validator) {
+			return;
+		}
 		if (enable) {
 			await LSPServer.validator.start();
 		} else {
@@ -74,12 +85,18 @@ export class LSPServer{
 
 	public static async onSetVersion(arg: IPickVersionArg) {
 		console.log("Server got: ", SERVER_REQUESTS.SET_VERSION, arg);
+		if (!LSPServer.validator) {
+			return;
+		}
 		// await switchVersion(arg);
 		requestClient.setVersion(LSPServer.validator.versionMatcher.activeUXPVersion);
 	}
 
 	public static async onRestartServer() {
 		console.log("Server got: ", SERVER_REQUESTS.RESTART_SERVER);
+		if (!LSPServer.validator) {
+			return;
+		}
 		await LSPServer.validator.stop();
 		await LSPServer.validator.start();
 	}
@@ -109,8 +126,6 @@ export class LSPServer{
 	private static async onInitialized() {
 		console.log("Server initialized start");
 		await LSPServer.fetchSettings();
-		// Set how to handle requests from client
-		setServerRequestHandlers(LSPServer.connection);
 		LSPServer.validator = new Validator(); // TODO improve instantiation
 		await LSPServer.validator.start();
 
@@ -155,7 +170,7 @@ export class LSPServer{
 	}
 
 	private static async onHover(textDocumentPosition: vs.HoverParams): Promise<vs.Hover | null> {
-		if (!LSPServer.validator.enabled) {
+		if (!LSPServer.validator?.enabled) {
 			return null;
 		}
 		// return runSafeAsync(runtime, async () => {
@@ -179,7 +194,7 @@ export class LSPServer{
 
 	private static async onCompletion(textDocumentPosition: vs.TextDocumentPositionParams): Promise<vs.CompletionItem[]|null> {
 		// debugger;
-		if (!LSPServer.validator.enabled) {
+		if (!LSPServer.validator?.enabled) {
 			return null;
 		}
 		const document = LSPServer.getDocument(textDocumentPosition);
@@ -210,6 +225,37 @@ export class LSPServer{
 		}
 	}
 
+	private static onInlayHint(params: vs.InlayHintParams): vs.InlayHint[] {
+		if (!LSPServer.validator?.enabled || !LSPServer.validator.versionMatcher) {
+			return [];
+		}
+		if (!params.textDocument.uri.toLowerCase().endsWith("manifest.json")) {
+			return [];
+		}
+		const document = LSPServer.documents.get(params.textDocument.uri);
+		if (!document) {
+			return [];
+		}
+		const jsonDocument = LSPServer.getJSONDocument(document);
+		return makeInlayHints(
+			document,
+			jsonDocument as ASTJSONDocument,
+			LSPServer.validator.versionMatcher,
+		);
+	}
+
+	private static onInlayHintResolve(hint: vs.InlayHint): vs.InlayHint {
+		if (typeof hint.label === "string") {
+			hint.label = [vs.InlayHintLabelPart.create(hint.label)];
+		}
+		for (let i = 0; i < hint.label.length; i++) {
+			let value = hint.label[i].value;
+			value = value.replace(" = ", "").split("|").map(str => str.trim()).join("\n");
+			hint.label[i].tooltip = value;
+		}
+		return hint;
+	}
+
 	private static onInitialize() {
 		console.log("Server initialize");
 
@@ -233,12 +279,6 @@ export class LSPServer{
 					],
 					resolveProvider: true,
 					id: "uxpManifestInlayHints",
-				},
-				inlineValueProvider: {
-					documentSelector: [{
-						language: "json",
-						pattern: "**/manifest.json",
-					}],
 				},
 				hoverProvider: true,
 				workspace: {
